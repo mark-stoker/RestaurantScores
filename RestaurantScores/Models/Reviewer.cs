@@ -28,7 +28,7 @@ namespace RestaurantScores.Models
 	    [DisplayName("Site Max Rating")]
 		public int OverallMaxScore { get; set; }
 
-		[DisplayName("Dish the Dirt Score")]
+		[DisplayName("Percentage Equivalent")]
 		public double? DishTheDirtScore { get; set; }
 
 	   

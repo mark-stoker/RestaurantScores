@@ -52,9 +52,14 @@
                 @item.reviewer.OverallMaxScore
             </td>
             <td>
-               @*Todo work out percentage based on overall score over max score*@
-            </td>
-        </tr>
+                @{
+                    double overallScore = @item.reviewer.OverallScore.GetValueOrDefault();
+                    double  overallMaxScore = @item.reviewer.OverallMaxScore;
+
+                    var divideSingle = overallScore / overallMaxScore * 100;
+                }
+            @divideSingle
+</tr>
     }
     <tfoot>
         <tr align="right">
@@ -62,9 +67,17 @@
             <td></td>
             <td></td>
             <td></td>
-            <td><strong>Total Average:</strong></td>
+            <td><strong>Aggregate Score:</strong></td>
             @*TODO: format to 1 dp*@
-            <td align="left">@Model.Average(x => x.reviewer.OverallScore)</td>
+            <td align="left">
+                @{
+                    double sumOveralScore = @Model.Sum(x => x.reviewer.OverallScore.GetValueOrDefault());
+                    double sumOverallMaxScore = @Model.Sum(y => y.reviewer.OverallMaxScore);
+
+                    var divideAll = sumOveralScore / sumOverallMaxScore * 100;
+                }
+                @divideAll.ToString("0.0")
+            </td>
         </tr>
     </tfoot>
     </tbody>
