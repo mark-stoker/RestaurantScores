@@ -56,7 +56,7 @@
                     double overallScore = @item.reviewer.OverallScore.GetValueOrDefault();
                     double  overallMaxScore = @item.reviewer.OverallMaxScore;
 
-                    var divideSingle = overallScore / overallMaxScore * 100;
+                    var divideSingle = @overallScore / overallMaxScore * 100;
                 }
             @divideSingle
 </tr>

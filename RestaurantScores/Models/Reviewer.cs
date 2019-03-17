@@ -30,7 +30,5 @@ namespace RestaurantScores.Models
 
 		[DisplayName("Percentage Equivalent")]
 		public double? DishTheDirtScore { get; set; }
-
-	   
     }
 }

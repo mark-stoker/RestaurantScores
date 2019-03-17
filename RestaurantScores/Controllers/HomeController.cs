@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -74,13 +73,11 @@ namespace RestaurantScores.Controllers
 			var htmlDoc = await Task.Factory.StartNew(() => web.Load(uri));
 			string reviewCount = ExtractReviewCountFromHtml(numberOfRatingsHtmlTag, numberOfRatingsHtmlAttribute, htmlDoc);
 			string ratingValue = ExtractRatingFromHtml(overallRatingHtmlTag, overallRatingHtmlAttribute, htmlDoc);
-			
 
 			var result = new List<string>
 			{
 				reviewCount,
 				ratingValue
-				
 			};
 
 			return result;
@@ -96,7 +93,6 @@ namespace RestaurantScores.Controllers
 			{
 				return htmlDoc.DocumentNode.SelectSingleNode(numberOfRatingsHtmlTag).Attributes[numberOfRatingsHtmlAttribute].Value;
 			}
-
 		}
 
 		private static string ExtractRatingFromHtml(string overallRatingHtmlTag, string overallRatngHtmlAttribte, HtmlDocument htmlDoc)
