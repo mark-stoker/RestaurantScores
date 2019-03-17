@@ -1,0 +1,71 @@
+﻿@model IEnumerable<RestaurantScores.Models.ResultsViewModel>
+
+@{
+    ViewData["Title"] = "Results";
+}
+
+<h2>Results</h2>
+<h3>Search results for :@Model.First().restaurant.Name @Model.First().restaurant.PostCode</h3>
+<tbody>
+</tbody>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.reviewer.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.reviewer.WebAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.reviewer.NumberOfReviews)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.reviewer.OverallScore)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.reviewer.OverallMaxScore)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.reviewer.DishTheDirtScore)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+       
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @item.reviewer.Name
+            </td>
+            <td>
+                @item.reviewer.WebAddress
+            </td>
+            <td>
+                @item.reviewer.NumberOfReviews
+            </td>
+            <td>
+                @item.reviewer.OverallScore
+            </td>
+            <td>
+                @item.reviewer.OverallMaxScore
+            </td>
+            <td>
+               @*Todo work out percentage based on overall score over max score*@
+            </td>
+        </tr>
+    }
+    <tfoot>
+        <tr align="right">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><strong>Total Average:</strong></td>
+            @*TODO: format to 1 dp*@
+            <td align="left">@Model.Average(x => x.reviewer.OverallScore)</td>
+        </tr>
+    </tfoot>
+    </tbody>
+</table>
