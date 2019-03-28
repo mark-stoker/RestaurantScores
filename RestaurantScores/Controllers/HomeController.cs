@@ -1,33 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Rewrite.Internal.PatternSegments;
+using Microsoft.EntityFrameworkCore.Internal;
 using RestaurantScores.Models;
-using HtmlAgilityPack;
 using RestaurantScores.Managers;
 
 namespace RestaurantScores.Controllers
 {
 	public class HomeController : Controller
-    {
+	{
+		private List<Restaurant> _restaurants;
+
         public IActionResult Index()
         {
             return View();
         }
-		
-		[HttpPost]
-		public IActionResult Results(Restaurant restaurant)
-        {
-	        var databaseManager = new DatabaseManager();
-			var reviewers = databaseManager.GetSearchData();
-			var scrapingManager = new ScrapingManager();
-			var results = new List<ResultsViewModel>();
 
-			scrapingManager.RenderScrapingResults(restaurant, scrapingManager, reviewers, results);
+		//TODO implement IOS as per Phil's suggestion
+		//This should clean up this method a bit
+	    [HttpPost]
+	    public IActionResult Restaurant(Restaurant restaurant)
+	    {
+			var webSearchManager = new WebSearchManager();
+		    var restaurants = webSearchManager.BingWebSearch(restaurant.Name);
 
-			return View("Results", results);
+			//Todo call the Resuts action method below passing in the list of Restaurants
+			var databaseManager = new DatabaseManager();
+		    var reviewers = databaseManager.GetSearchData();
+		    var scrapingManager = new ScrapingManager();
+		    var results = new List<ResultsViewModel>();
+			
+		    //TODO need to deal with possible system null reference exception here
+		    foreach (var res in restaurants)
+		    {
+			    foreach (var review in reviewers)
+			    {
+				    if (review.WebAddress.Contains(res.Url))
+				    {
+					    //TODO reviewers will need to be updated with custom url
+					    scrapingManager.RenderScrapingResults(res, scrapingManager, reviewers, results);
+					}
+			    }
+		    }
+
+		    return View("Results", results);
 		}
 
 		public IActionResult About()

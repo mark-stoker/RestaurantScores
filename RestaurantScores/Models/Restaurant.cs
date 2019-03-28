@@ -10,11 +10,9 @@ namespace RestaurantScores.Models
 {
     public class Restaurant : IRestaurant
     {
-        //[Required]
+        [Required]
         public string Name { get; set; }
 
-        //[Required]
-        [DisplayName("Post Code")]
-        public string PostCode { get; set; }
+	    public string Url { get; set; }
     }
 }

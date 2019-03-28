@@ -8,7 +8,7 @@
 <h2>RestaurantScores</h2>
 
 <hr />
-@using (Html.BeginForm("Results", "Home", FormMethod.Post))
+@using (Html.BeginForm("Restaurant", "Home", FormMethod.Post))
 {
     <div class="row">
         <div class="col-md-4">
@@ -18,11 +18,6 @@
                     <label asp-for="Name" class="control-label"></label>
                     <input asp-for="Name" class="form-control"/>
                     <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="PostCode" class="control-label"></label>
-                    <input asp-for="PostCode" class="form-control"/>
-                    <span asp-validation-for="PostCode" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <input type="submit" value="Search"/>

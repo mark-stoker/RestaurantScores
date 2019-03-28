@@ -19,7 +19,6 @@ namespace RestaurantScores.Managers
 					restaurant = new Restaurant()
 					{
 						Name = restaurant.Name,
-						PostCode = restaurant.PostCode
 					},
 					reviewer = new Reviewer()
 					{
