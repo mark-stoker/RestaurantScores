@@ -4,11 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using Newtonsoft.Json.Linq;
+using RestaurantScores.Managers.Interfaces;
 using RestaurantScores.Models;
 
 namespace RestaurantScores.Managers
 {
-	public class WebSearchManager
+	public class WebSearchManager : IWebSearchManager
 	{
 		//TODO this needs to be stored on my computer i.e. localvariable??? or online Vault??
 		const string accessKey = "";

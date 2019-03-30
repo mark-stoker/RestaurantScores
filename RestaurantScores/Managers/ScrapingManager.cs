@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
+using RestaurantScores.Managers.Interfaces;
 using RestaurantScores.Models;
 
 namespace RestaurantScores.Managers
 {
-	public class ScrapingManager
+	public class ScrapingManager : IScrapingManager
 	{
-		public List<ResultsViewModel> ScrapeRestaurantReviewSites(List<Restaurant> restaurantSitesToScrape, ScrapingManager scrapingManager, List<Reviewer> reviewers)
+		public List<ResultsViewModel> ScrapeRestaurantReviewSites(List<Restaurant> restaurantSitesToScrape, List<Reviewer> reviewers)
 		{
 			var results = new List<ResultsViewModel>();
 			foreach (var scrapingDetails in reviewers)
@@ -18,7 +19,6 @@ namespace RestaurantScores.Managers
 
 				if (filteredRestaurantsToScrape != null)
 				{
-					//scrapingManager.ScrapeRestaurantReviewSites(restaurantSiteToScrape, scrapingManager, restaurantSiteToScrape, results);
 					//Should this call be async using await>???
 					var reviewerRating = GetReviewValuesFromHtml(filteredRestaurantsToScrape.Url.Trim(), scrapingDetails.NumberOfReviewsHtml.Trim(), scrapingDetails.NumberOfReviewsHtmlAttribute?.Trim(), scrapingDetails.OverallScoreHtml.Trim(), scrapingDetails.OverallScoreHtmlAttribute?.Trim());
 

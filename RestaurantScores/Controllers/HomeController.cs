@@ -1,39 +1,36 @@
-﻿using System.Collections.Generic;
-using System.Data.Common;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Rewrite.Internal.PatternSegments;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Internal;
 using RestaurantScores.Models;
-using RestaurantScores.Managers;
-using RestaurantScores.Models.Interfaces;
+using RestaurantScores.Managers.Interfaces;
 
 namespace RestaurantScores.Controllers
 {
 	public class HomeController : Controller
 	{
-		private List<Restaurant> _restaurants;
+		private readonly IDatabaseManager _databaseManager;
+		private readonly IScrapingManager _scrapingManager;
+		private readonly IWebSearchManager _webSearchManager;
 
-        public IActionResult Index()
+		public HomeController(IDatabaseManager databaseManager, IScrapingManager scrapingManager, IWebSearchManager webSearchManager)
+		{
+			_databaseManager = databaseManager;
+			_scrapingManager = scrapingManager;
+			_webSearchManager = webSearchManager;
+		}
+
+		public IActionResult Index()
         {
             return View();
         }
 
-		//TODO implement IOS as per Phil's suggestion
-		//This should clean up this method a bit
-		//This will also sure classes are not tightly coupled
-	    [HttpPost]
 	    public IActionResult Search(Search search)
 	    {
-			var webSearchManager = new WebSearchManager();
-		    var webSearchResults = webSearchManager.BingWebSearch(search.SearchString);
-			var databaseManager = new DatabaseManager();
-		    var reviewersScrapingDetails = databaseManager.GetScrapingData();
-		    var scrapingManager = new ScrapingManager();
-		    var results = scrapingManager.ScrapeRestaurantReviewSites(webSearchResults, scrapingManager, reviewersScrapingDetails);
+		    var webSearchResults = _webSearchManager.BingWebSearch(search.SearchString);
+		    var reviewersScrapingData = _databaseManager.GetScrapingData();
+		    var results = _scrapingManager.ScrapeRestaurantReviewSites(webSearchResults, reviewersScrapingData);
 
+			//TODO if result == null then show message asking user to expand their results
+			
 			return View("Results", results);
 		}
 

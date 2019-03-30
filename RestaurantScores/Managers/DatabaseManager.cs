@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using RestaurantScores.Managers.Interfaces;
 using RestaurantScores.Models;
 
 namespace RestaurantScores.Managers
 {
-	public class DatabaseManager
+	public class DatabaseManager : IDatabaseManager
 	{
 		public List<Reviewer> GetScrapingData()
 		{
