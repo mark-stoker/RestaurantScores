@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite.Internal.PatternSegments;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Internal;
 using RestaurantScores.Models;
 using RestaurantScores.Managers;
+using RestaurantScores.Models.Interfaces;
 
 namespace RestaurantScores.Controllers
 {
@@ -20,32 +23,18 @@ namespace RestaurantScores.Controllers
 
 		//TODO implement IOS as per Phil's suggestion
 		//This should clean up this method a bit
+		//This will also sure classes are not tightly coupled
 	    [HttpPost]
-	    public IActionResult Restaurant(Restaurant restaurant)
+	    public IActionResult Search(Search search)
 	    {
 			var webSearchManager = new WebSearchManager();
-		    var restaurants = webSearchManager.BingWebSearch(restaurant.Name);
-
-			//Todo call the Resuts action method below passing in the list of Restaurants
+		    var webSearchResults = webSearchManager.BingWebSearch(search.SearchString);
 			var databaseManager = new DatabaseManager();
-		    var reviewers = databaseManager.GetSearchData();
+		    var reviewersScrapingDetails = databaseManager.GetScrapingData();
 		    var scrapingManager = new ScrapingManager();
-		    var results = new List<ResultsViewModel>();
-			
-		    //TODO need to deal with possible system null reference exception here
-		    foreach (var res in restaurants)
-		    {
-			    foreach (var review in reviewers)
-			    {
-				    if (review.WebAddress.Contains(res.Url))
-				    {
-					    //TODO reviewers will need to be updated with custom url
-					    scrapingManager.RenderScrapingResults(res, scrapingManager, reviewers, results);
-					}
-			    }
-		    }
+		    var results = scrapingManager.ScrapeRestaurantReviewSites(webSearchResults, scrapingManager, reviewersScrapingDetails);
 
-		    return View("Results", results);
+			return View("Results", results);
 		}
 
 		public IActionResult About()

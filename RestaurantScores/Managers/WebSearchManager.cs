@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestaurantScores.Models;
 
@@ -13,14 +10,13 @@ namespace RestaurantScores.Managers
 {
 	public class WebSearchManager
 	{
-		// Enter a valid subscription key.
-		//TODO this needs to be stored on my computer i.e. localvariable???
+		//TODO this needs to be stored on my computer i.e. localvariable??? or online Vault??
 		const string accessKey = "";
 		const string uriBase = "https://api.cognitive.microsoft.com/bing/v7.0/search";
 
 		public List<Restaurant> BingWebSearch(string searchQuery)
 		{
-			var uriQuery = uriBase + "?q=" + Uri.EscapeDataString(searchQuery) + "&count=100";
+			var uriQuery = uriBase + "?q=" + Uri.EscapeDataString(searchQuery) + "&count=200";
 			HttpWebResponse response = SearchBing(uriQuery);
 			List<Restaurant> restaurants = ParseJsonWebResponse(response);
 

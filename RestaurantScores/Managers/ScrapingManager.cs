@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using RestaurantScores.Models;
@@ -8,28 +9,39 @@ namespace RestaurantScores.Managers
 {
 	public class ScrapingManager
 	{
-		public void RenderScrapingResults(Restaurant restaurant, ScrapingManager scrapingManager, List<Reviewer> reviewers, List<ResultsViewModel> results)
+		public List<ResultsViewModel> ScrapeRestaurantReviewSites(List<Restaurant> restaurantSitesToScrape, ScrapingManager scrapingManager, List<Reviewer> reviewers)
 		{
-			foreach (var reviewer in reviewers)
+			var results = new List<ResultsViewModel>();
+			foreach (var scrapingDetails in reviewers)
 			{
-				var reviewerRating = scrapingManager.GetReviewValuesFromHtml(reviewer.WebAddress.Trim(), reviewer.NumberOfReviewsHtml.Trim(), reviewer.NumberOfReviewsHtmlAttribute?.Trim(), reviewer.OverallScoreHtml.Trim(), reviewer.OverallScoreHtmlAttribute?.Trim());
+				var filteredRestaurantsToScrape = restaurantSitesToScrape.FirstOrDefault(x => x.Url.Contains(scrapingDetails.WebAddress.Trim()));
 
-				results.Add(new ResultsViewModel()
+				if (filteredRestaurantsToScrape != null)
 				{
-					restaurant = new Restaurant()
+					//scrapingManager.ScrapeRestaurantReviewSites(restaurantSiteToScrape, scrapingManager, restaurantSiteToScrape, results);
+					//Should this call be async using await>???
+					var reviewerRating = GetReviewValuesFromHtml(filteredRestaurantsToScrape.Url.Trim(), scrapingDetails.NumberOfReviewsHtml.Trim(), scrapingDetails.NumberOfReviewsHtmlAttribute?.Trim(), scrapingDetails.OverallScoreHtml.Trim(), scrapingDetails.OverallScoreHtmlAttribute?.Trim());
+
+					results.Add(new ResultsViewModel()
 					{
-						Name = restaurant.Name,
-					},
-					reviewer = new Reviewer()
-					{
-						Name = reviewer.Name,
-						WebAddress = reviewer.WebAddress,
-						NumberOfReviews = reviewerRating.Result[0],
-						OverallScore = Convert.ToDouble(reviewerRating.Result[1].Trim()),
-						OverallMaxScore = reviewer.OverallMaxScore
-					}
-				});
+						restaurant = new Restaurant()
+						{
+							Name = filteredRestaurantsToScrape.Name,
+							Url = filteredRestaurantsToScrape.Url,
+						},
+						reviewer = new Reviewer()
+						{
+							Name = scrapingDetails.Name,
+							WebAddress = scrapingDetails.WebAddress,
+							NumberOfReviews = reviewerRating.Result[0],
+							OverallScore = Convert.ToDouble(reviewerRating.Result[1].Trim()),
+							OverallMaxScore = scrapingDetails.OverallMaxScore
+						}
+					});
+				}
 			}
+
+			return results;
 		}
 
 		//TODO: Investigate if I need to dispose of connection??
@@ -37,7 +49,7 @@ namespace RestaurantScores.Managers
 		{
 			//ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
 			HtmlWeb web = new HtmlWeb();
-			//TODO: Is ths an async call????
+			//TODO: Is ths an async call???? If not it needs to be!!!
 			//Todo: if Internet connection is lost here may need to handle it
 			//Todo: Some sites seem to block this approach e.g. Zomato why? also need error handling
 			var htmlDoc = await Task.Factory.StartNew(() => web.Load(uri));

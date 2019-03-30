@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace RestaurantScores.Models.Interfaces
 {
-    interface IRestaurant
+    interface IRestaurantReview
     {
         string Name { get; set; }
 		string Url { get; set; }
