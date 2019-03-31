@@ -11,8 +11,8 @@ namespace RestaurantScores.Managers
 {
 	public class WebSearchManager : IWebSearchManager
 	{
-		//TODO this needs to be stored on my computer i.e. localvariable??? or online Vault??
-		const string accessKey = "";
+		//TODO need to set up online tool for secrets
+		private static readonly string accessKey = Environment.GetEnvironmentVariable("BingWebSearchApi");
 		const string uriBase = "https://api.cognitive.microsoft.com/bing/v7.0/search";
 
 		public List<Restaurant> BingWebSearch(string searchQuery)
@@ -50,4 +50,6 @@ namespace RestaurantScores.Managers
 			return response;
 		}
 	}
+
+
 }
