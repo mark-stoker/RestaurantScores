@@ -3,6 +3,7 @@
     public class ResultsViewModel
     {
         public Restaurant restaurant { get; set; }
-        public Reviewer reviewer { get; set; }
+		public Review Review { get; set; }
+        public ReviewerScrapingDetails ReviewerScrapingDetails { get; set; }
     }
 }

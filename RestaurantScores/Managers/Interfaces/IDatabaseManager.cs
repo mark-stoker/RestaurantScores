@@ -5,6 +5,6 @@ namespace RestaurantScores.Managers.Interfaces
 {
 	public interface IDatabaseManager
 	{
-		List<Reviewer> GetScrapingData();
+		List<ReviewerScrapingDetails> GetScrapingData();
 	}
 }

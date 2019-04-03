@@ -14,7 +14,7 @@ namespace RestaurantScores.Models
         {
         }
 
-        public virtual DbSet<Reviewer> Reviewer { get; set; }
+        public virtual DbSet<ReviewerScrapingDetails> Reviewer { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -27,7 +27,7 @@ namespace RestaurantScores.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Reviewer>(entity =>
+            modelBuilder.Entity<ReviewerScrapingDetails>(entity =>
             {
                 entity.Property(e => e.Id).HasDefaultValueSql("1");
 
@@ -47,10 +47,6 @@ namespace RestaurantScores.Models
 		            .IsRequired()
 		            .HasMaxLength(200);
 
-	            entity.Property(e => e.NumberOfReviews)
-		            .IsRequired()
-		            .HasMaxLength(200);
-
 				entity.Property(e => e.OverallScoreHtml)
 		            .IsRequired()
 		            .HasMaxLength(200);
@@ -59,15 +55,7 @@ namespace RestaurantScores.Models
 		            .IsRequired()
 		            .HasMaxLength(200);
 
-				entity.Property(e => e.OverallScore)
-		            .IsRequired()
-		            .HasMaxLength(200);
-
 	            entity.Property(e => e.OverallMaxScore)
-		            .IsRequired()
-		            .HasMaxLength(200);
-
-				entity.Property(e => e.DishTheDirtScore)
 		            .IsRequired()
 		            .HasMaxLength(200);
 			});

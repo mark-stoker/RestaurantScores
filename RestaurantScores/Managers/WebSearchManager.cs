@@ -15,16 +15,16 @@ namespace RestaurantScores.Managers
 		private static readonly string accessKey = Environment.GetEnvironmentVariable("BingWebSearchApi");
 		const string uriBase = "https://api.cognitive.microsoft.com/bing/v7.0/search";
 
-		public List<Restaurant> BingWebSearch(string searchQuery)
+		public List<Review> BingWebSearch(string searchQuery)
 		{
 			var uriQuery = uriBase + "?q=" + Uri.EscapeDataString(searchQuery) + "&count=200";
 			HttpWebResponse response = SearchBing(uriQuery);
-			List<Restaurant> restaurants = ParseJsonWebResponse(response);
+			List<Review> restaurants = ParseJsonWebResponse(response);
 
 			return restaurants;
 		}
 
-		private static List<Restaurant> ParseJsonWebResponse(HttpWebResponse response)
+		private static List<Review> ParseJsonWebResponse(HttpWebResponse response)
 		{
 			string json = new StreamReader(response.GetResponseStream()).ReadToEnd();
 
@@ -32,7 +32,7 @@ namespace RestaurantScores.Managers
 			JObject ojObject = (JObject)joResponse["webPages"];
 			JArray array = (JArray)ojObject["value"];
 
-			List<Restaurant> Restaurants = array.Select(x => new Restaurant
+			List<Review> Restaurants = array.Select(x => new Review
 			{
 				Name = (string)x["name"],
 				Url = (string)x["url"],

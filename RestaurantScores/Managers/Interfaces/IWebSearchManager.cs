@@ -5,6 +5,6 @@ namespace RestaurantScores.Managers.Interfaces
 {
 	public interface IWebSearchManager
 	{
-		List<Restaurant> BingWebSearch(string searchQuery);
+		List<Review> BingWebSearch(string searchQuery);
 	}
 }

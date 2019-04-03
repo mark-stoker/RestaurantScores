@@ -10,31 +10,36 @@ namespace RestaurantScores.Managers
 {
 	public class ScrapingManager : IScrapingManager
 	{
-		public List<ResultsViewModel> ScrapeRestaurantReviewSites(List<Restaurant> restaurantSitesToScrape, List<Reviewer> reviewers)
+		public List<ResultsViewModel> ScrapeRestaurantReviewSites(List<Review> reviewSitesToScrape, List<ReviewerScrapingDetails> reviewers)
 		{
 			var results = new List<ResultsViewModel>();
 			foreach (var scrapingDetails in reviewers)
 			{
-				var filteredRestaurantsToScrape = restaurantSitesToScrape.FirstOrDefault(x => x.Url.Contains(scrapingDetails.WebAddress.Trim()));
+				var filteredReviewSitesToScrape = reviewSitesToScrape.FirstOrDefault(x => x.Url.Contains(scrapingDetails.WebAddress.Trim()));
 
-				if (filteredRestaurantsToScrape != null)
+				if (filteredReviewSitesToScrape != null)
 				{
 					//Should this call be async using await>???
-					var reviewerRating = GetReviewValuesFromHtml(filteredRestaurantsToScrape.Url.Trim(), scrapingDetails.NumberOfReviewsHtml.Trim(), scrapingDetails.NumberOfReviewsHtmlAttribute?.Trim(), scrapingDetails.OverallScoreHtml.Trim(), scrapingDetails.OverallScoreHtmlAttribute?.Trim());
+					var reviewerRating = GetReviewValuesFromHtml(filteredReviewSitesToScrape.Url.Trim(), scrapingDetails.NumberOfReviewsHtml.Trim(), scrapingDetails.NumberOfReviewsHtmlAttribute?.Trim(), scrapingDetails.OverallScoreHtml.Trim(), scrapingDetails.OverallScoreHtmlAttribute?.Trim());
 
 					results.Add(new ResultsViewModel()
 					{
 						restaurant = new Restaurant()
 						{
-							Name = filteredRestaurantsToScrape.Name,
-							Url = filteredRestaurantsToScrape.Url,
+							Name = "",
+							Url = ""
 						},
-						reviewer = new Reviewer()
+						Review = new Review()
+						{
+							Name = filteredReviewSitesToScrape.Name,
+							Url = filteredReviewSitesToScrape.Url,
+							NumberOfReviews = reviewerRating.Result[0],
+							OverallScore = Convert.ToDouble(reviewerRating.Result[1].Trim()),
+						},
+						ReviewerScrapingDetails = new ReviewerScrapingDetails()
 						{
 							Name = scrapingDetails.Name,
 							WebAddress = scrapingDetails.WebAddress,
-							NumberOfReviews = reviewerRating.Result[0],
-							OverallScore = Convert.ToDouble(reviewerRating.Result[1].Trim()),
 							OverallMaxScore = scrapingDetails.OverallMaxScore
 						}
 					});

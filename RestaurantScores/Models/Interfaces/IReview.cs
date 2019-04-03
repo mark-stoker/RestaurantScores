@@ -8,7 +8,9 @@ namespace RestaurantScores.Models.Interfaces
     interface IReview
     {
         string Name { get; set; }
-        float Score { get; set; }
-        float MaxScore { get; set; }
-    }
+        string Url { get; set; }
+	    string NumberOfReviews { get; set; }
+	    double? OverallScore { get; set; }
+	    double? DishTheDirtScore { get; set; }
+	}
 }

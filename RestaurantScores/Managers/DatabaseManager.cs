@@ -7,7 +7,7 @@ namespace RestaurantScores.Managers
 {
 	public class DatabaseManager : IDatabaseManager
 	{
-		public List<Reviewer> GetScrapingData()
+		public List<ReviewerScrapingDetails> GetScrapingData()
 		{
 			var context = new ReviewersContext();
 			var reviewers = context.Reviewer.ToList();

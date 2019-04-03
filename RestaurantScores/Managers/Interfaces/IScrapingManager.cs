@@ -5,6 +5,6 @@ namespace RestaurantScores.Managers.Interfaces
 {
 	public interface IScrapingManager
 	{
-		List<ResultsViewModel> ScrapeRestaurantReviewSites(List<Restaurant> restaurantSitesToScrape, List<Reviewer> reviewers);
+		List<ResultsViewModel> ScrapeRestaurantReviewSites(List<Review> revieweSitesToScrape, List<ReviewerScrapingDetails> reviewers);
 	}
 }

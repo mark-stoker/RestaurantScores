@@ -5,29 +5,29 @@
 }
 
 <h2>Results</h2>
-<h3>Search results for :@Model.First().restaurant.Name</h3>
+<h3>Search results for :@Model.First().Review.Name</h3>
 <tbody>
 </tbody>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.reviewer.Name)
+                @Html.DisplayNameFor(model => model.ReviewerScrapingDetails.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.reviewer.WebAddress)
+                @Html.DisplayNameFor(model => model.ReviewerScrapingDetails.WebAddress)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.reviewer.NumberOfReviews)
+                @Html.DisplayNameFor(model => model.Review.NumberOfReviews)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.reviewer.OverallScore)
+                @Html.DisplayNameFor(model => model.Review.OverallScore)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.reviewer.OverallMaxScore)
+                @Html.DisplayNameFor(model => model.ReviewerScrapingDetails.OverallMaxScore)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.reviewer.DishTheDirtScore)
+                @Html.DisplayNameFor(model => model.Review.DishTheDirtScore)
             </th>
         </tr>
     </thead>
@@ -37,24 +37,24 @@
     {
         <tr>
             <td>
-                @item.reviewer.Name
+                @item.ReviewerScrapingDetails.Name
             </td>
             <td>
-                @item.reviewer.WebAddress
+                @item.ReviewerScrapingDetails.WebAddress
             </td>
             <td>
-                @item.reviewer.NumberOfReviews
+                @item.Review.NumberOfReviews
             </td>
             <td>
-                @item.reviewer.OverallScore
+                @item.Review.OverallScore
             </td>
             <td>
-                @item.reviewer.OverallMaxScore
+                @item.ReviewerScrapingDetails.OverallMaxScore
             </td>
             <td>
                 @{
-                    double overallScore = @item.reviewer.OverallScore.GetValueOrDefault();
-                    double  overallMaxScore = @item.reviewer.OverallMaxScore;
+                    double overallScore = @item.Review.OverallScore.GetValueOrDefault();
+                    double  overallMaxScore = @item.ReviewerScrapingDetails.OverallMaxScore;
 
                     var divideSingle = @overallScore / overallMaxScore * 100;
                 }
@@ -71,8 +71,8 @@
             @*TODO: format to 1 dp*@
             <td align="left">
                 @{
-                    double sumOveralScore = @Model.Sum(x => x.reviewer.OverallScore.GetValueOrDefault());
-                    double sumOverallMaxScore = @Model.Sum(y => y.reviewer.OverallMaxScore);
+                    double sumOveralScore = @Model.Sum(x => x.Review.OverallScore.GetValueOrDefault());
+                    double sumOverallMaxScore = @Model.Sum(y => y.ReviewerScrapingDetails.OverallMaxScore);
 
                     var divideAll = sumOveralScore / sumOverallMaxScore * 100;
                 }
