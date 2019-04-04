@@ -17,7 +17,7 @@ namespace RestaurantScores.Managers
 
 		public List<Review> BingWebSearch(string searchQuery)
 		{
-			var uriQuery = uriBase + "?q=" + Uri.EscapeDataString(searchQuery) + "&count=200";
+			var uriQuery = uriBase + "?q=" + Uri.EscapeDataString(searchQuery) + "restaurant review" + "&count=200&mkt=en-GB";
 			HttpWebResponse response = SearchBing(uriQuery);
 			List<Review> restaurants = ParseJsonWebResponse(response);
 
@@ -28,9 +28,9 @@ namespace RestaurantScores.Managers
 		{
 			string json = new StreamReader(response.GetResponseStream()).ReadToEnd();
 
-			JObject joResponse = JObject.Parse(json);
-			JObject ojObject = (JObject)joResponse["webPages"];
-			JArray array = (JArray)ojObject["value"];
+			var joResponse = JObject.Parse(json);
+			var ojObject = (JObject)joResponse["webPages"];
+			var array = (JArray)ojObject["value"];
 
 			List<Review> Restaurants = array.Select(x => new Review
 			{
@@ -43,13 +43,11 @@ namespace RestaurantScores.Managers
 
 		private static HttpWebResponse SearchBing(string uriQuery)
 		{
-			WebRequest request = HttpWebRequest.Create(uriQuery);
+			var request = WebRequest.Create(uriQuery);
 			request.Headers["Ocp-Apim-Subscription-Key"] = accessKey;
-			HttpWebResponse response = (HttpWebResponse)request.GetResponseAsync().Result;
+			var response = (HttpWebResponse)request.GetResponseAsync().Result;
 
 			return response;
 		}
 	}
-
-
 }

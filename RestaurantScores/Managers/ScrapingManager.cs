@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using RestaurantScores.Managers.Interfaces;
@@ -10,36 +12,36 @@ namespace RestaurantScores.Managers
 {
 	public class ScrapingManager : IScrapingManager
 	{
-		public List<ResultsViewModel> ScrapeRestaurantReviewSites(List<Review> reviewSitesToScrape, List<ReviewerScrapingDetails> reviewers)
+		public List<ResultsViewModel> ScrapeRestaurantReviewSites(List<Review> reviewSites, List<ReviewerScrapingDetails> reviewersScrapingDetails, string searchString)
 		{
 			var results = new List<ResultsViewModel>();
-			foreach (var scrapingDetails in reviewers)
+			foreach (var scrapingDetails in reviewersScrapingDetails)
 			{
-				var filteredReviewSitesToScrape = reviewSitesToScrape.FirstOrDefault(x => x.Url.Contains(scrapingDetails.WebAddress.Trim()));
+				var filteredReviewSitesToScrape = reviewSites.FirstOrDefault(x => x.Url.Contains(scrapingDetails.WebAddress.Trim()));
 
 				if (filteredReviewSitesToScrape != null)
 				{
 					//Should this call be async using await>???
-					var reviewerRating = GetReviewValuesFromHtml(filteredReviewSitesToScrape.Url.Trim(), scrapingDetails.NumberOfReviewsHtml.Trim(), scrapingDetails.NumberOfReviewsHtmlAttribute?.Trim(), scrapingDetails.OverallScoreHtml.Trim(), scrapingDetails.OverallScoreHtmlAttribute?.Trim());
+					var reviewerRating = GetReviewValuesFromHtml(filteredReviewSitesToScrape?.Url?.Trim(), scrapingDetails?.NumberOfReviewsHtml?.Trim(), scrapingDetails.NumberOfReviewsHtmlAttribute?.Trim(), scrapingDetails?.OverallScoreHtml?.Trim(), scrapingDetails?.OverallScoreHtmlAttribute?.Trim());
 
 					results.Add(new ResultsViewModel()
 					{
-						restaurant = new Restaurant()
+						Restaurant = new Restaurant()
 						{
-							Name = "",
+							Name = searchString,
 							Url = ""
 						},
 						Review = new Review()
 						{
-							Name = filteredReviewSitesToScrape.Name,
-							Url = filteredReviewSitesToScrape.Url,
-							NumberOfReviews = reviewerRating.Result[0],
-							OverallScore = Convert.ToDouble(reviewerRating.Result[1].Trim()),
+							Name = filteredReviewSitesToScrape?.Name,
+							Url = filteredReviewSitesToScrape?.Url,
+							NumberOfReviews = int.Parse(reviewerRating?.Result[0], NumberStyles.AllowThousands),
+							OverallScore = Convert.ToDouble(reviewerRating?.Result[1].Trim()),
 						},
 						ReviewerScrapingDetails = new ReviewerScrapingDetails()
 						{
-							Name = scrapingDetails.Name,
-							WebAddress = scrapingDetails.WebAddress,
+							Name = scrapingDetails?.Name,
+							WebAddress = filteredReviewSitesToScrape?.Url, //TODO: change back to scrapingDetails.WebAddress,
 							OverallMaxScore = scrapingDetails.OverallMaxScore
 						}
 					});
@@ -52,47 +54,91 @@ namespace RestaurantScores.Managers
 		//TODO: Investigate if I need to dispose of connection??
 		private async Task<List<string>> GetReviewValuesFromHtml(string uri, string numberOfRatingsHtmlTag, string numberOfRatingsHtmlAttribute, string overallRatingHtmlTag, string overallRatingHtmlAttribute)
 		{
-			//ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
-			HtmlWeb web = new HtmlWeb();
-			//TODO: Is ths an async call???? If not it needs to be!!!
-			//Todo: if Internet connection is lost here may need to handle it
-			//Todo: Some sites seem to block this approach e.g. Zomato why? also need error handling
-			var htmlDoc = await Task.Factory.StartNew(() => web.Load(uri));
-			string reviewCount = ExtractReviewCountFromHtml(numberOfRatingsHtmlTag, numberOfRatingsHtmlAttribute, htmlDoc);
-			string ratingValue = ExtractRatingFromHtml(overallRatingHtmlTag, overallRatingHtmlAttribute, htmlDoc);
+			//if (uri != null)
+			//{
+				//ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
+				HtmlWeb web = new HtmlWeb();
+				web.AutoDetectEncoding = true;
+				//TODO: Is ths an async call???? If not it needs to be!!!
+				//Todo: if Internet connection is lost here may need to handle it
+				//Todo: Some sites seem to block this approach e.g. Zomato why? also need error handling
+				//This may need to be abstracted out of here for mocking purposes
+				var htmlDoc = await Task.Factory.StartNew(() => web.Load(uri));
 
-			var result = new List<string>
-			{
-				reviewCount,
-				ratingValue
-			};
+				try
+				{
+					//What if there are no reviews available?? return 0
+					string reviewCount = ExtractReviewCountFromHtml(numberOfRatingsHtmlTag, numberOfRatingsHtmlAttribute, htmlDoc);
+					string ratingValue = ExtractRatingFromHtml(overallRatingHtmlTag, overallRatingHtmlAttribute, htmlDoc);
 
-			return result;
+					var result = new List<string>
+					{
+						reviewCount,
+						ratingValue
+					};
+
+					return result;
+				}
+				catch (Exception exception)
+				{
+					throw new System.AggregateException("Either the url to scrape or the scraping data itself is incorrect.", exception);
+				}
+			//}
+			//else
+			//{
+			//	return new List<string>
+			//	{
+			//		"0",
+			//		"0"
+			//	};
+			//}
+			
 		}
 
 		private static string ExtractReviewCountFromHtml(string numberOfRatingsHtmlTag, string numberOfRatingsHtmlAttribute, HtmlDocument htmlDoc)
 		{
 			if (numberOfRatingsHtmlAttribute == null)
-			{
-				return htmlDoc.DocumentNode.SelectSingleNode(numberOfRatingsHtmlTag).InnerText;
-			}
-			else
-			{
-				return htmlDoc.DocumentNode.SelectSingleNode(numberOfRatingsHtmlTag).Attributes[numberOfRatingsHtmlAttribute].Value;
-			}
+			return ExtractFromHtmlTag(numberOfRatingsHtmlTag, htmlDoc);
+			
+				return ExtractFromHtmlAttribute(numberOfRatingsHtmlTag, numberOfRatingsHtmlAttribute, htmlDoc);
 		}
 
 		private static string ExtractRatingFromHtml(string overallRatingHtmlTag, string overallRatngHtmlAttribte, HtmlDocument htmlDoc)
 		{
-
 			if (overallRatngHtmlAttribte == null)
+			return ExtractFromHtmlTag(overallRatingHtmlTag, htmlDoc);
+			
+				return ExtractFromHtmlAttribute(overallRatingHtmlTag, overallRatngHtmlAttribte, htmlDoc);
+		}
+
+		private static string ExtractFromHtmlTag(string numberOfRatingsHtmlTag, HtmlDocument htmlDoc)
+		{
+			string result;
+			if (htmlDoc.DocumentNode.SelectSingleNode(numberOfRatingsHtmlTag) != null)
 			{
-				return htmlDoc.DocumentNode.SelectSingleNode(overallRatingHtmlTag).InnerText;
+				result = htmlDoc.DocumentNode.SelectSingleNode(numberOfRatingsHtmlTag).InnerText;
 			}
 			else
 			{
-				return htmlDoc.DocumentNode.SelectSingleNode(overallRatingHtmlTag).Attributes[overallRatngHtmlAttribte].Value;
+				result = "0";
 			}
+
+			return result.Trim().IndexOf(" ") >= 0 ? result.Trim().Substring(0, result.Trim().IndexOf(" ", StringComparison.Ordinal)) : result.Trim();
+		}
+
+		private static string ExtractFromHtmlAttribute(string numberOfRatingsHtmlTag, string numberOfRatingsHtmlAttribute, HtmlDocument htmlDoc)
+		{
+			string result;
+			if (htmlDoc.DocumentNode.SelectSingleNode(numberOfRatingsHtmlTag) != null)
+			{
+				result = htmlDoc.DocumentNode.SelectSingleNode(numberOfRatingsHtmlTag).Attributes[numberOfRatingsHtmlAttribute].Value;
+			}
+			else
+			{
+				result = "0";
+			}
+
+			return result.Trim().IndexOf(" ") >= 0 ? result.Trim().Substring(0, result.Trim().IndexOf(" ", StringComparison.Ordinal)) : result.Trim();
 		}
 	}
 }

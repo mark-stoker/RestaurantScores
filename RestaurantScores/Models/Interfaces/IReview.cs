@@ -9,7 +9,7 @@ namespace RestaurantScores.Models.Interfaces
     {
         string Name { get; set; }
         string Url { get; set; }
-	    string NumberOfReviews { get; set; }
+	    int NumberOfReviews { get; set; }
 	    double? OverallScore { get; set; }
 	    double? DishTheDirtScore { get; set; }
 	}

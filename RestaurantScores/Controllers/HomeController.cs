@@ -27,7 +27,7 @@ namespace RestaurantScores.Controllers
 	    {
 		    var webSearchResults = _webSearchManager.BingWebSearch(search.SearchString);
 		    var reviewersScrapingData = _databaseManager.GetScrapingData();
-		    var results = _scrapingManager.ScrapeRestaurantReviewSites(webSearchResults, reviewersScrapingData);
+		    var results = _scrapingManager.ScrapeRestaurantReviewSites(webSearchResults, reviewersScrapingData, search.SearchString);
 
 			//TODO if result == null then show message asking user to expand their results
 			

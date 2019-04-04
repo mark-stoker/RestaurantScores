@@ -10,7 +10,7 @@ namespace RestaurantScores.Models
         public string Url { get; set; }
 
 	    [DisplayName("Number of Reviews")]
-	    public string NumberOfReviews { get; set; }
+	    public int NumberOfReviews { get; set; }
 
 		[DisplayName("Site Average Rating")]
 	    public double? OverallScore { get; set; }
