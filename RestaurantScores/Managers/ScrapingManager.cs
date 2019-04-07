@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using RestaurantScores.Managers.Interfaces;
@@ -54,10 +53,15 @@ namespace RestaurantScores.Managers
 		//TODO: Investigate if I need to dispose of connection??
 		private async Task<List<string>> GetReviewValuesFromHtml(string uri, string numberOfRatingsHtmlTag, string numberOfRatingsHtmlAttribute, string overallRatingHtmlTag, string overallRatingHtmlAttribute)
 		{
+			var result = new List<string>
+				{
+					"0",
+					"0.0"
+				};
 			//if (uri != null)
 			//{
-				//ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
-				HtmlWeb web = new HtmlWeb();
+			//ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
+			HtmlWeb web = new HtmlWeb();
 				web.AutoDetectEncoding = true;
 				//TODO: Is ths an async call???? If not it needs to be!!!
 				//Todo: if Internet connection is lost here may need to handle it
@@ -65,34 +69,26 @@ namespace RestaurantScores.Managers
 				//This may need to be abstracted out of here for mocking purposes
 				var htmlDoc = await Task.Factory.StartNew(() => web.Load(uri));
 
-				try
-				{
-					//What if there are no reviews available?? return 0
-					string reviewCount = ExtractReviewCountFromHtml(numberOfRatingsHtmlTag, numberOfRatingsHtmlAttribute, htmlDoc);
-					string ratingValue = ExtractRatingFromHtml(overallRatingHtmlTag, overallRatingHtmlAttribute, htmlDoc);
+			try
+			{
+				//What if there are no reviews available?? return 0
+				string reviewCount = ExtractReviewCountFromHtml(numberOfRatingsHtmlTag, numberOfRatingsHtmlAttribute, htmlDoc);
+				string ratingValue = ExtractRatingFromHtml(overallRatingHtmlTag, overallRatingHtmlAttribute, htmlDoc);
 
-					var result = new List<string>
-					{
-						reviewCount,
-						ratingValue
-					};
-
-					return result;
-				}
-				catch (Exception exception)
+				result = new List<string>
 				{
-					throw new System.AggregateException("Either the url to scrape or the scraping data itself is incorrect.", exception);
-				}
-			//}
-			//else
-			//{
-			//	return new List<string>
-			//	{
-			//		"0",
-			//		"0"
-			//	};
-			//}
-			
+					reviewCount,
+					ratingValue
+				};
+
+				return result;
+			}
+			catch (Exception exception)
+			{
+				//throw new System.AggregateException("Either the url to scrape or the scraping data itself is incorrect.", exception);
+			}
+
+			return result;
 		}
 
 		private static string ExtractReviewCountFromHtml(string numberOfRatingsHtmlTag, string numberOfRatingsHtmlAttribute, HtmlDocument htmlDoc)
@@ -117,13 +113,14 @@ namespace RestaurantScores.Managers
 			if (htmlDoc.DocumentNode.SelectSingleNode(numberOfRatingsHtmlTag) != null)
 			{
 				result = htmlDoc.DocumentNode.SelectSingleNode(numberOfRatingsHtmlTag).InnerText;
+				return result.Trim().IndexOf(" ") >= 0 ? result.Trim().Substring(0, result.Trim().IndexOf(" ", StringComparison.Ordinal)) : result.Trim();
 			}
 			else
 			{
-				result = "0";
+				return "0";
 			}
 
-			return result.Trim().IndexOf(" ") >= 0 ? result.Trim().Substring(0, result.Trim().IndexOf(" ", StringComparison.Ordinal)) : result.Trim();
+			
 		}
 
 		private static string ExtractFromHtmlAttribute(string numberOfRatingsHtmlTag, string numberOfRatingsHtmlAttribute, HtmlDocument htmlDoc)
@@ -132,13 +129,12 @@ namespace RestaurantScores.Managers
 			if (htmlDoc.DocumentNode.SelectSingleNode(numberOfRatingsHtmlTag) != null)
 			{
 				result = htmlDoc.DocumentNode.SelectSingleNode(numberOfRatingsHtmlTag).Attributes[numberOfRatingsHtmlAttribute].Value;
+				return result.Trim().IndexOf(" ") >= 0 ? result.Trim().Substring(0, result.Trim().IndexOf(" ", StringComparison.Ordinal)) : result.Trim();
 			}
 			else
 			{
-				result = "0";
+				return "0";
 			}
-
-			return result.Trim().IndexOf(" ") >= 0 ? result.Trim().Substring(0, result.Trim().IndexOf(" ", StringComparison.Ordinal)) : result.Trim();
 		}
 	}
 }
