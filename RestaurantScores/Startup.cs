@@ -31,9 +31,9 @@ namespace RestaurantScores
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-	        services.AddTransient<IDatabaseManager, DatabaseManager>();
-	        services.AddTransient<IScrapingManager, ScrapingManager>();
-	        services.AddTransient<IWebSearchManager, WebSearchManager>();
+	        services.AddScoped<IDatabaseManager, DatabaseManager>();
+	        services.AddScoped<IScrapingManager, ScrapingManager>();
+	        services.AddScoped<IWebSearchManager, WebSearchManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
