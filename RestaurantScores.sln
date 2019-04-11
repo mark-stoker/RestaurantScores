@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.106
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestaurantScores", "RestaurantScores\RestaurantScores.csproj", "{5E296A0F-69C2-4E14-A881-5A4924A2EB8E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantScoresUnitTests", "NUnitTestProject1\RestaurantScoresUnitTests.csproj", "{63C92AC7-E85A-4AE5-A788-2030748DEA55}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantScoresUnitTests", "RestaurantScoresUnitTests\RestaurantScoresUnitTests.csproj", "{63C92AC7-E85A-4AE5-A788-2030748DEA55}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
