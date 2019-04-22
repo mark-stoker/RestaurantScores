@@ -61,13 +61,15 @@ namespace RestaurantScores.Managers
 			//if (uri != null)
 			//{
 			//ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
-			HtmlWeb web = new HtmlWeb();
-				web.AutoDetectEncoding = true;
-				//TODO: Is ths an async call???? If not it needs to be!!!
-				//Todo: if Internet connection is lost here may need to handle it
-				//Todo: Some sites seem to block this approach e.g. Zomato why? also need error handling
-				//This may need to be abstracted out of here for mocking purposes
-				var htmlDoc = await Task.Factory.StartNew(() => web.Load(uri));
+			var web = new HtmlWeb
+			{
+				AutoDetectEncoding = true
+			};
+			//TODO: Is ths an async call???? If not it needs to be!!!
+			//Todo: if Internet connection is lost here may need to handle it
+			//Todo: Some sites seem to block this approach e.g. Zomato why? also need error handling
+			//This may need to be abstracted out of here for mocking purposes
+			var htmlDoc = await Task.Factory.StartNew(() => web.Load(uri));
 
 			try
 			{
@@ -85,10 +87,8 @@ namespace RestaurantScores.Managers
 			}
 			catch (Exception exception)
 			{
-				//throw new System.AggregateException("Either the url to scrape or the scraping data itself is incorrect.", exception);
+				throw new System.AggregateException("Either the url to scrape or the scraping data itself is incorrect.", exception);
 			}
-
-			return result;
 		}
 
 		private static string ExtractReviewCountFromHtml(string numberOfRatingsHtmlTag, string numberOfRatingsHtmlAttribute, HtmlDocument htmlDoc)
