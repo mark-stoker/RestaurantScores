@@ -85,9 +85,11 @@ namespace RestaurantScores.Managers
 
 				return result;
 			}
+			//TODO this needs to be refactored, causing a warning
 			catch (Exception exception)
 			{
-				throw new System.AggregateException("Either the url to scrape or the scraping data itself is incorrect.", exception);
+				return result;
+				//throw new System.AggregateException("Either the url to scrape or the scraping data itself is incorrect.", exception);
 			}
 		}
 
