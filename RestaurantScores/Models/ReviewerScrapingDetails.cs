@@ -10,8 +10,8 @@ namespace RestaurantScores.Models
         public string WebAddress { get; set; }
 		public string NumberOfReviewsHtml { get; set; }
 		public string NumberOfReviewsHtmlAttribute { get; set; }
+	    public string OverallScoreHtml { get; set; }
 		public string OverallScoreHtmlAttribute { get; set; }
-		public string OverallScoreHtml { get; set; }
 	    public int OverallMaxScore { get; set; }
 	}
 }
