@@ -8,15 +8,20 @@
 <h2>DishTheDirt</h2>
 
 <hr />
-@using (Html.BeginForm("Search", "Home", FormMethod.Post))
+@using (Html.BeginForm("Search", "Home", FormMethod.Post, new { onsubmit = "return validateForm()" }))
 {
     <div class="row">
         <div class="col-md-4">
             <form asp-action="Index">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
                 <div class="form-group">
                     <label asp-for="SearchString" class="control-label">Enter Restaurant name and location...</label>
-                    <input asp-for="SearchString" class="form-control"/>
+                    <input asp-for="SearchString" class="form-control" />
+
+                    <label asp-for="Name" id="NameLabel" class="control-label">Enter name...</label>
+                    <input asp-for="Name" id="Name" class="form-control" />
+
                     <span asp-validation-for="SearchString" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -25,7 +30,6 @@
             </form>
         </div>
     </div>
-
     <div>
         <a asp-action="Index">Reset search criteria</a>
     </div>
@@ -33,3 +37,13 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+<script>
+    document.getElementById('NameLabel').style.display = "none";
+    document.getElementById('Name').style.display = "none";
+
+    function validateForm() {
+        if (document.getElementById('Name').value !== '') {
+            return false;
+        }
+    }
+</script>
