@@ -11,7 +11,6 @@ namespace RestaurantScores.Managers
 {
 	public class WebSearchManager : IWebSearchManager
 	{
-		//TODO need to set up online tool for secrets
 		private static readonly string accessKey = Environment.GetEnvironmentVariable("BingWebSearchApi");
 		const string uriBase = "https://api.cognitive.microsoft.com/bing/v7.0/search";
 
