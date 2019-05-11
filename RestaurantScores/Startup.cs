@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using RestaurantScores.Managers;
 using RestaurantScores.Managers.Interfaces;
 
-
 namespace RestaurantScores
 {
 	public class Startup

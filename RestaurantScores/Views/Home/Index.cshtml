@@ -18,7 +18,7 @@
                 <div class="form-group">
                     <label asp-for="SearchString" class="control-label">Enter Restaurant name and location...</label>
                     <input asp-for="SearchString" class="form-control" />
-
+                    <div class="g-recaptcha" data-sitekey="6LfC9qIUAAAAAJlN-ZsyAzFOmI6q_Jj_fK9_6vip"></div>
                     <label asp-for="Name" id="NameLabel" class="control-label">Enter name...</label>
                     <input asp-for="Name" id="Name" class="form-control" />
 
@@ -37,6 +37,7 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+<script src='https://www.google.com/recaptcha/api.js' type="text/javascript"></script>
 <script>
     document.getElementById('NameLabel').style.display = "none";
     document.getElementById('Name').style.display = "none";

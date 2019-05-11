@@ -1,5 +1,11 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.Net;
+using System.Net.Http;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
+using RestaurantScores.Managers;
 using RestaurantScores.Models;
 using RestaurantScores.Managers.Interfaces;
 
@@ -10,12 +16,14 @@ namespace RestaurantScores.Controllers
 		private readonly IDatabaseManager _databaseManager;
 		private readonly IScrapingManager _scrapingManager;
 		private readonly IWebSearchManager _webSearchManager;
+		private readonly IHostingEnvironment _hostingEnvironment;
 
-		public HomeController(IDatabaseManager databaseManager, IScrapingManager scrapingManager, IWebSearchManager webSearchManager)
+		public HomeController(IDatabaseManager databaseManager, IScrapingManager scrapingManager, IWebSearchManager webSearchManager, IHostingEnvironment hostingEnvironment)
 		{
 			_databaseManager = databaseManager;
 			_scrapingManager = scrapingManager;
 			_webSearchManager = webSearchManager;
+			_hostingEnvironment = hostingEnvironment;
 		}
 
 		public IActionResult Index()
@@ -23,15 +31,27 @@ namespace RestaurantScores.Controllers
             return View();
         }
 
-	    public IActionResult Search(Search search)
+		[HttpPost]
+		public IActionResult Search(Search search)
 	    {
-		    var webSearchResults = _webSearchManager.BingWebSearch(search.SearchString);
+		    if (ModelState.IsValid && !_hostingEnvironment.IsDevelopment())
+		    {
+			    var recaptchaManager = new RecaptchaManager();
+
+				if (!recaptchaManager.ReCaptchaPassed(Request.Form["g-recaptcha-response"], Environment.GetEnvironmentVariable("GoogleRecaptcha-Secret")))
+			    {
+					ModelState.AddModelError(string.Empty, "Please tick the box below to search.");
+					return View("Index");
+			    }
+		    }
+
+			var webSearchResults = _webSearchManager.BingWebSearch(search.SearchString);
 		    var reviewersScrapingData = _databaseManager.GetScrapingData();
 		    var results = _scrapingManager.ScrapeRestaurantReviewSites(webSearchResults, reviewersScrapingData, search.SearchString);
 
-			//TODO if result == null then show message asking user to expand their results
-			
-			return View("Results", results);
+		    //TODO if result == null then show message asking user to expand their results
+
+		    return View("Results", results);
 		}
 
 		public IActionResult About()
