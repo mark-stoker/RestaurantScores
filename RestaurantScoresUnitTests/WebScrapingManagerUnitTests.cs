@@ -92,36 +92,29 @@ namespace Tests
 				}).BuildList();
 		}
 
-		[Test]
+		[Test] 
 		public void SearchForRatingsAndReviewCounts_ReviewAndScrapingDataIsCorrect_ScrapingDetailsReturned()
 		{
 			//Arrange
 			//See Setup()
-			var testScrapingManager = new ScrapingManager();
 
 			//Act
-			var result = testScrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, "The Ledbury notting hill london");
-			var result2 = testScrapingManager.GetDummyInt();
+			var result = _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, "The Ledbury notting hill london");
+
 			//Assert
 			Assert.AreEqual(4, result.Count);
 
-			Assert.AreEqual(99, result[0].Review.NumberOfReviews);
+			Assert.IsTrue(result[0].Review.NumberOfReviews > 0);
+			Assert.IsTrue(result[0].Review.OverallScore > 0);
 
-			Assert.AreEqual(2, result2);
+			Assert.IsTrue(result[1].Review.NumberOfReviews > 0);
+			Assert.IsTrue(result[1].Review.OverallScore > 0);
 
-			Assert.AreEqual("some restaurant", result[0].Review.NumberOfReviews);
+			Assert.IsTrue(result[2].Review.NumberOfReviews > 0);
+			Assert.IsTrue(result[2].Review.OverallScore > 0);
 
-			//Assert.AreEqual(result[0].Review.NumberOfReviews, 9999);
-			//Assert.AreEqual(result[0].Review.OverallScore, 9999);
-
-			//Assert.AreEqual(result[1].Review.NumberOfReviews, 9999);
-			//Assert.AreEqual(result[1].Review.OverallScore, 9999);
-
-			//Assert.AreEqual(result[2].Review.NumberOfReviews, 9999);
-			//Assert.AreEqual(result[2].Review.OverallScore, 9999);
-
-			//Assert.AreEqual(result[3].Review.NumberOfReviews, 9999);
-			//Assert.AreEqual(result[3].Review.OverallScore, 9999);
+			Assert.IsTrue(result[3].Review.NumberOfReviews > 0);
+			Assert.IsTrue(result[3].Review.OverallScore > 0);
 		}
 
 		[Test]

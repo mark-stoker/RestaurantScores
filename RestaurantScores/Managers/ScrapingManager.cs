@@ -34,10 +34,8 @@ namespace RestaurantScores.Managers
 						{
 							Name = filteredReviewSitesToScrape?.Name,
 							Url = filteredReviewSitesToScrape?.Url,
-							//NumberOfReviews = int.Parse(reviewerRating?.Result[0], NumberStyles.AllowThousands),
-							NumberOfReviews = 10,
-							//OverallScore = Convert.ToDouble(reviewerRating?.Result[1].Trim()),
-							OverallScore = 4.5,
+							NumberOfReviews = int.Parse(reviewerRating?.Result[0], NumberStyles.AllowThousands),
+							OverallScore = Convert.ToDouble(reviewerRating?.Result[1].Trim()),
 						},
 						ReviewerScrapingDetails = new ReviewerScrapingDetails()
 						{
@@ -50,11 +48,6 @@ namespace RestaurantScores.Managers
 			}
 
 			return results;
-		}
-
-		public int GetDummyInt()
-		{
-			return 5;
 		}
 
 		//TODO: Investigate if I need to dispose of connection??
@@ -128,6 +121,8 @@ namespace RestaurantScores.Managers
 			{
 				return "0";
 			}
+
+			
 		}
 
 		private static string ExtractFromHtmlAttribute(string numberOfRatingsHtmlTag, string numberOfRatingsHtmlAttribute, HtmlDocument htmlDoc)
