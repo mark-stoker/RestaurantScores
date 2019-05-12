@@ -34,8 +34,10 @@ namespace RestaurantScores.Managers
 						{
 							Name = filteredReviewSitesToScrape?.Name,
 							Url = filteredReviewSitesToScrape?.Url,
-							NumberOfReviews = int.Parse(reviewerRating?.Result[0], NumberStyles.AllowThousands),
-							OverallScore = Convert.ToDouble(reviewerRating?.Result[1].Trim()),
+							//NumberOfReviews = int.Parse(reviewerRating?.Result[0], NumberStyles.AllowThousands),
+							NumberOfReviews = 10,
+							//OverallScore = Convert.ToDouble(reviewerRating?.Result[1].Trim()),
+							OverallScore = 4.5,
 						},
 						ReviewerScrapingDetails = new ReviewerScrapingDetails()
 						{
