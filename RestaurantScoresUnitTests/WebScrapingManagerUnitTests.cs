@@ -101,9 +101,11 @@ namespace Tests
 
 			//Act
 			var result = testScrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, "The Ledbury notting hill london");
-
+			var result2 = testScrapingManager.GetDummyInt();
 			//Assert
 			Assert.AreEqual(4, result.Count);
+
+			Assert.AreEqual(2, result2);
 
 			Assert.AreEqual("some restaurant", result[0].Review.NumberOfReviews);
 

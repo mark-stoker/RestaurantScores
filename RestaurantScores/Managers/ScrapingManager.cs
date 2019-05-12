@@ -50,6 +50,11 @@ namespace RestaurantScores.Managers
 			return results;
 		}
 
+		public int GetDummyInt()
+		{
+			return 5;
+		}
+
 		//TODO: Investigate if I need to dispose of connection??
 		private async Task<List<string>> GetReviewValuesFromHtml(string uri, string numberOfRatingsHtmlTag, string numberOfRatingsHtmlAttribute, string overallRatingHtmlTag, string overallRatingHtmlAttribute)
 		{
