@@ -11,15 +11,18 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
+  
 
 steps:
 - script: dotnet restore
+  displayName: 'restore nuget packages'  
 
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'  
   
 - task: DotNetCoreCLI@2
   inputs:
+    displayName: 'run tests'
     command: test
     projects: '**/*Tests/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
