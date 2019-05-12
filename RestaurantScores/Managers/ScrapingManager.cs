@@ -69,13 +69,10 @@ namespace RestaurantScores.Managers
 			//Todo: if Internet connection is lost here may need to handle it
 			//Todo: Some sites seem to block this approach e.g. Zomato why? also need error handling
 			//This may need to be abstracted out of here for mocking purposes
-			
+			var htmlDoc = await Task.Factory.StartNew(() => web.Load(uri));
 
 			try
 			{
-
-				var htmlDoc = await Task.Factory.StartNew(() => web.Load(uri));
-
 				//What if there are no reviews available?? return 0
 				string reviewCount = ExtractReviewCountFromHtml(numberOfRatingsHtmlTag, numberOfRatingsHtmlAttribute, htmlDoc);
 				string ratingValue = ExtractRatingFromHtml(overallRatingHtmlTag, overallRatingHtmlAttribute, htmlDoc);
@@ -91,8 +88,8 @@ namespace RestaurantScores.Managers
 			//TODO this needs to be refactored, causing a warning
 			catch (Exception exception)
 			{
-				//return result;
-				throw new System.AggregateException("Either the url to scrape or the scraping data itself is incorrect.", exception);
+				return result;
+				//throw new System.AggregateException("Either the url to scrape or the scraping data itself is incorrect.", exception);
 			}
 }
 
