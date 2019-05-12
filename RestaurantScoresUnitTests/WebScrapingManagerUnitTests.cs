@@ -105,7 +105,7 @@ namespace Tests
 			//Assert
 			Assert.AreEqual(4, result.Count);
 
-			Assert.AreEqual("some restaurant", result[0].Restaurant.Name);
+			Assert.AreEqual("some restaurant", result[0].Review.NumberOfReviews);
 
 			//Assert.AreEqual(result[0].Review.NumberOfReviews, 9999);
 			//Assert.AreEqual(result[0].Review.OverallScore, 9999);
