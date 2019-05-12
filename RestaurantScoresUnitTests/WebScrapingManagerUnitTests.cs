@@ -104,17 +104,17 @@ namespace Tests
 			//Assert
 			Assert.AreEqual(4, result.Count);
 
-			Assert.IsTrue(result[0].Review.NumberOfReviews > 0);
-			Assert.IsTrue(result[0].Review.OverallScore > 0);
+			Assert.AreEqual(result[0].Review.NumberOfReviews, 9999);
+			Assert.AreEqual(result[0].Review.OverallScore, 9999);
 
-			Assert.IsTrue(result[1].Review.NumberOfReviews > 0);
-			Assert.IsTrue(result[1].Review.OverallScore > 0);
+			Assert.AreEqual(result[1].Review.NumberOfReviews, 9999);
+			Assert.AreEqual(result[1].Review.OverallScore, 9999);
 
-			Assert.IsTrue(result[2].Review.NumberOfReviews > 0);
-			Assert.IsTrue(result[2].Review.OverallScore > 0);
+			Assert.AreEqual(result[2].Review.NumberOfReviews, 9999);
+			Assert.AreEqual(result[2].Review.OverallScore, 9999);
 
-			Assert.IsTrue(result[3].Review.NumberOfReviews > 0);
-			Assert.IsTrue(result[3].Review.OverallScore > 0);
+			Assert.AreEqual(result[3].Review.NumberOfReviews, 9999);
+			Assert.AreEqual(result[3].Review.OverallScore, 9999);
 		}
 
 		[Test]
