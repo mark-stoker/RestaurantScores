@@ -108,19 +108,19 @@ namespace Tests
 			Assert.IsTrue(result[3].Review.OverallScore > 0);
 		}
 
-		//[Test]
-		//public void SearchForRatingsAndReviewCounts_OpenTableReviewUrlIncorrect_ZeroValuesReturnedForThatReview()
-		//{
-		//	//Arrange
-		//	_reviewSitestToScrape[1].Url = "https://www.opentable.co.uk/the-ledbury//dffgdffgsdfg////";
+		[Test]
+		public void SearchForRatingsAndReviewCounts_OpenTableReviewUrlIncorrect_ZeroValuesReturnedForThatReview()
+		{
+			//Arrange
+			_reviewSitestToScrape[1].Url = "https://www.opentable.co.uk/the-ledbury//dffgdffgsdfg////";
 
-		//	//Act
-		//	var result = _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails,"The Ledbury notting hill london");
+			//Act
+			var result = _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, "The Ledbury notting hill london");
 
-		//	//Assert
-		//	Assert.AreEqual(result[1].Review.NumberOfReviews, 0);
-		//	Assert.AreEqual(result[1].Review.OverallScore, 0.0);
-		//}
+			//Assert
+			Assert.AreEqual(result[1].Review.NumberOfReviews, 0);
+			Assert.AreEqual(result[1].Review.OverallScore, 0.0);
+		}
 
 		//[Test]
 		//public void SearchForRatingsAndReviewCounts_TripAdvisorReviewSetToNull_SystemNullRerenceException()
@@ -192,7 +192,7 @@ namespace Tests
 		//	Assert.AreEqual(result[2].Review.NumberOfReviews, 0);
 		//	Assert.AreEqual(result[2].Review.OverallScore, 0.0);
 		//}
-		
+
 		//Todo: Serach Url is null
 	}
 }
