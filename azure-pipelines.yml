@@ -19,5 +19,5 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: test
-    projects: '/home/vsts/work/1/s/RestaurantScoresUnitTests/RestaurantScoresUnitTests.csproj'
-    arguments: '--configuration $(buildConfiguration) --collect "Code coverage"' 
+    projects: '**/*Tests/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
