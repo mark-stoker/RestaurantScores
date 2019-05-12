@@ -121,8 +121,6 @@ namespace RestaurantScores.Managers
 			{
 				return "0";
 			}
-
-			
 		}
 
 		private static string ExtractFromHtmlAttribute(string numberOfRatingsHtmlTag, string numberOfRatingsHtmlAttribute, HtmlDocument htmlDoc)
