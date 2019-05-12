@@ -26,17 +26,19 @@ steps:
     command: test
     projects: '**/*Tests/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
-    
+
+- task: PublishBuildArtifacts@1
+
 # ...
 # do this after you've built your app, near the end of your pipeline in most cases
 # for example, you do this before you deploy to an Azure web app on Windows
-- task: DotNetCoreCLI@2
-  displayName: 'Publish files'
-  inputs:
-    command: publish
-    publishWebProjects: True
-    arguments: '--configuration $(BuildConfiguration) --output $(System.ArtifactsDirectory)'    
-    zipAfterPublish: True
+#- task: DotNetCoreCLI@2
+#  displayName: 'Publish files'
+#  inputs:
+#    command: publish
+#    publishWebProjects: True
+#   arguments: '--configuration $(BuildConfiguration) --output $(System.ArtifactsDirectory)'    
+#    zipAfterPublish: True
     
  #- task: AzureRmWebAppDeployment@3
  # inputs:
