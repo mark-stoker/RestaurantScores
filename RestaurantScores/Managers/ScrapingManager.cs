@@ -53,11 +53,7 @@ namespace RestaurantScores.Managers
 		//TODO: Investigate if I need to dispose of connection??
 		private async Task<List<string>> GetReviewValuesFromHtml(string uri, string numberOfRatingsHtmlTag, string numberOfRatingsHtmlAttribute, string overallRatingHtmlTag, string overallRatingHtmlAttribute)
 		{
-			var result = new List<string>
-			{
-				"0",
-				"0.0"
-			};
+			
 			//if (uri != null)
 			//{
 			//ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
@@ -78,7 +74,7 @@ namespace RestaurantScores.Managers
 				string reviewCount = ExtractReviewCountFromHtml(numberOfRatingsHtmlTag, numberOfRatingsHtmlAttribute, htmlDoc);
 				string ratingValue = ExtractRatingFromHtml(overallRatingHtmlTag, overallRatingHtmlAttribute, htmlDoc);
 
-				result = new List<string>
+				var result = new List<string>
 				{
 					reviewCount,
 					ratingValue
