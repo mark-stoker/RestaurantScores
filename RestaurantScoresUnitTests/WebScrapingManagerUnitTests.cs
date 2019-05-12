@@ -92,30 +92,30 @@ namespace Tests
 				}).BuildList();
 		}
 
-		//[Test] 
-		//public void SearchForRatingsAndReviewCounts_ReviewAndScrapingDataIsCorrect_ScrapingDetailsReturned()
-		//{
-		//	//Arrange
-		//	//See Setup()
+		[Test]
+		public void SearchForRatingsAndReviewCounts_ReviewAndScrapingDataIsCorrect_ScrapingDetailsReturned()
+		{
+			//Arrange
+			//See Setup()
 
-		//	//Act
-		//	var result = _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, "The Ledbury notting hill london");
+			//Act
+			var result = _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, "The Ledbury notting hill london");
 
-		//	//Assert
-		//	Assert.AreEqual(4, result.Count);
+			//Assert
+			Assert.AreEqual(4, result.Count);
 
-		//	Assert.IsTrue(result[0].Review.NumberOfReviews > 0);
-		//	Assert.IsTrue(result[0].Review.OverallScore > 0);
+			Assert.IsTrue(result[0].Review.NumberOfReviews > 0);
+			Assert.IsTrue(result[0].Review.OverallScore > 0);
 
-		//	Assert.IsTrue(result[1].Review.NumberOfReviews > 0);
-		//	Assert.IsTrue(result[1].Review.OverallScore > 0);
+			Assert.IsTrue(result[1].Review.NumberOfReviews > 0);
+			Assert.IsTrue(result[1].Review.OverallScore > 0);
 
-		//	Assert.IsTrue(result[2].Review.NumberOfReviews > 0);
-		//	Assert.IsTrue(result[2].Review.OverallScore > 0);
+			Assert.IsTrue(result[2].Review.NumberOfReviews > 0);
+			Assert.IsTrue(result[2].Review.OverallScore > 0);
 
-		//	Assert.IsTrue(result[3].Review.NumberOfReviews > 0);
-		//	Assert.IsTrue(result[3].Review.OverallScore > 0);
-		//}
+			Assert.IsTrue(result[3].Review.NumberOfReviews > 0);
+			Assert.IsTrue(result[3].Review.OverallScore > 0);
+		}
 
 		[Test]
 		public void SearchForRatingsAndReviewCounts_OpenTableReviewUrlIncorrect_ZeroValuesReturnedForThatReview()
