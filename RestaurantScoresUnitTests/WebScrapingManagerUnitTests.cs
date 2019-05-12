@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using RestaurantScores.Managers;
@@ -168,7 +169,7 @@ namespace Tests
 		public void SearchForRatingsAndReviewCounts_TripAdvisorReviewCountHtmlScrapingDataSetToNull_ZeroReturnedForTotalNmberOfReviews()
 		{
 			//Arrange
-			_reviewersScrapingDetails[0].NumberOfReviewsHtml = null;
+			_reviewersScrapingDetails[0].NumberOfReviewsHtml = String.Empty;
 
 			//Act
 			var result = _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, "The Ledbury notting hill london");
@@ -182,7 +183,7 @@ namespace Tests
 		public void SearchForRatingsAndReviewCounts_TimeoutOveralScoreHtmlScrapingDataSetToNull_ZeroReturnedForTotalNmberOfReviews()
 		{
 			//Arrange
-			_reviewersScrapingDetails[2].OverallScoreHtml = null;
+			_reviewersScrapingDetails[2].OverallScoreHtml = String.Empty;
 
 			//Act
 			var result = _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, "The Ledbury notting hill london");
