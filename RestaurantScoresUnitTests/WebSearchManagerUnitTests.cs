@@ -15,16 +15,16 @@ namespace Tests
 			
 		}
 
-		[Test] 
-		public void SearchForRatingsAndReviewCounts_ReviewAndScrapingDataIsCorrect_ScrapingDetailsReturned()
-		{
-			//Arrange
+		//[Test] 
+		//public void SearchForRatingsAndReviewCounts_ReviewAndScrapingDataIsCorrect_ScrapingDetailsReturned()
+		//{
+		//	//Arrange
 
-			//Act
+		//	//Act
 			
 
-			//Assert
+		//	//Assert
 			
-		}
+		//}
 	}
 }
