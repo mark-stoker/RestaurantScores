@@ -10,7 +10,7 @@ namespace RestaurantScores.Models
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
-			optionsBuilder.UseSqlite(Environment.GetEnvironmentVariable("RestaurantScoresDbConnectionString") ?? throw new InvalidOperationException());
+			optionsBuilder.UseSqlite(Environment.GetEnvironmentVariable("RestaurantScoresDbConnectionString"));
 		}
 	}
 }
