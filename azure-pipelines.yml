@@ -19,14 +19,7 @@ steps:
 
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
-
- - task: DotNetCoreCLI@2
-  displayName: 'run tests'
-  inputs:   
-    command: test
-    projects: '**/*Tests/*.csproj'
-    arguments: '--configuration $(buildConfiguration)'
-    
+  
 - task: DotNetCoreCLI@2
   displayName: 'dotnet publish'
   inputs:
@@ -35,6 +28,13 @@ steps:
     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
     zipAfterPublish: True
 
+ - task: DotNetCoreCLI@2
+  displayName: 'run tests'
+  inputs:   
+    command: test
+    projects: '**/*Tests/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+    
 - task: PublishBuildArtifacts@1
   displayName: 'publish artifacts'
   inputs:
