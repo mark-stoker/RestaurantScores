@@ -20,19 +20,19 @@ steps:
   displayName: 'dotnet build $(buildConfiguration)'
   
 - task: DotNetCoreCLI@2
+displayName: 'run tests'
+  inputs:   
+    command: test
+    projects: '**/*Tests/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+  
+- task: DotNetCoreCLI@2
   displayName: 'dotnet publish'
   inputs:
     command: publish
     publishWebProjects: True
     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
     zipAfterPublish: True
-
- #- task: DotNetCoreCLI@2
-#displayName: 'run tests'
-  #inputs:   
-    #command: test
-    #projects: '**/*Tests/*.csproj'
-    #arguments: '--configuration $(buildConfiguration)'
     
 #- task: PublishBuildArtifacts@1
   #displayName: 'publish artifacts'
