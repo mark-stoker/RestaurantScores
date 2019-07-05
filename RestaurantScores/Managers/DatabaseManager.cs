@@ -10,7 +10,13 @@ namespace RestaurantScores.Managers
 		public List<ReviewerScrapingDetails> GetScrapingData()
 		{
 			var context = new ReviewerScrpaingDetailsContext();
-			var reviewers = context.ReviewerScrapingDetails.ToList();
+			List<ReviewerScrapingDetails> reviewers;
+
+			using (context)
+			{
+				reviewers = context.ReviewerScrapingDetails.ToList();
+			}
+			
 			return reviewers;
 		}
 	}
