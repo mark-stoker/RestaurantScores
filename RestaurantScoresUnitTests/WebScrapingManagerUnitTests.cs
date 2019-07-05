@@ -11,6 +11,7 @@ namespace Tests
 		private ScrapingManager _scrapingManager = new ScrapingManager();
 		private List<Review> _reviewSitestToScrape = new List<Review>();
 		private List<ReviewerScrapingDetails> _reviewersScrapingDetails = new List<ReviewerScrapingDetails>();
+		private readonly string _searchStringForRestaurant = "The Ledbury notting hill london";
 
 		[SetUp]
 		public void Setup()
@@ -82,45 +83,87 @@ namespace Tests
 				}).BuildList();
 		}
 
-		//TODO: Refactor Unit Tests
-
-		[Test] 
-		public void SearchForRatingsAndReviewCounts_ReviewAndScrapingDataIsCorrect_ScrapingDetailsReturned()
+		[Test]
+		public void SearchForAllRatingsAndReviewCounts_ReviewAndScrapingDataIsCorrect_TotalNumberOfCompaniesBeingScrapedIsReturned()
 		{
 			//Arrange
 			//See Setup()
 
 			//Act
-			var result = _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, "The Ledbury notting hill london");
+			var result = _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, _searchStringForRestaurant);
 
 			//Assert
 			Assert.AreEqual(4, result.Count);
+		}
 
+		[Test] 
+		public void SearchForTripAdvisorRatingsAndReviewCounts_ReviewAndScrapingDataIsCorrect_ScrapingDetailsReturned()
+		{
+			//Arrange
+			//See Setup()
+
+			//Act
+			var result = _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, _searchStringForRestaurant);
+
+			//Assert
 			Assert.IsTrue(result[0].Review.NumberOfReviews > 0);
 			Assert.IsTrue(result[0].Review.OverallScore > 0);
+		}
 
+		[Test]
+		public void SearchForOpenTableRatingsAndReviewCounts_ReviewAndScrapingDataIsCorrect_ScrapingDetailsReturned()
+		{
+			//Arrange
+			//See Setup()
+
+			//Act
+			var result = _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, _searchStringForRestaurant);
+
+			//Assert
 			Assert.IsTrue(result[1].Review.NumberOfReviews > 0);
 			Assert.IsTrue(result[1].Review.OverallScore > 0);
+		}
 
+		[Test]
+		public void SearchForTimeoutRatingsAndReviewCounts_ReviewAndScrapingDataIsCorrect_ScrapingDetailsReturned()
+		{
+			//Arrange
+			//See Setup()
+
+			//Act
+			var result = _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, _searchStringForRestaurant);
+
+			//Assert
 			Assert.IsTrue(result[2].Review.NumberOfReviews > 0);
 			Assert.IsTrue(result[2].Review.OverallScore > 0);
+		}
 
+		[Test]
+		public void SearchForYelpRatingsAndReviewCounts_ReviewAndScrapingDataIsCorrect_ScrapingDetailsReturned()
+		{
+			//Arrange
+			//See Setup()
+
+			//Act
+			var result = _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, _searchStringForRestaurant);
+
+			//Assert
 			Assert.IsTrue(result[3].Review.NumberOfReviews > 0);
 			Assert.IsTrue(result[3].Review.OverallScore > 0);
 		}
 
 		//[Test]
-		//public void SearchForRatingsAndReviewCounts_OpenTableReviewUrlIncorrect_ZeroValuesReturnedForThatReview()
+		//public void SearchForRatingsAndReviewCounts_OpenTableReviewUrlIncorrect_ExceptionThrows()
 		//{
 		//	//Arrange
 		//	_reviewSitestToScrape[1].Url = "https://www.opentable.co.uk/the-ledbury//dffgdffgsdfg////";
 
-		//	//Act
-		//	var result = _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, "The Ledbury notting hill london");
+		//	//Act and Assert
 
-		//	//Assert
-		//	Assert.AreEqual(result[1].Review.NumberOfReviews, 0);
-		//	Assert.AreEqual(result[1].Review.OverallScore, 0.0);
+		//	var result = _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails,
+		//		_searchStringForRestaurant);
+		//	Assert.Throws<IncorrectScrapingPropertiesException>(() => _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, _searchStringForRestaurant)); ;
+			
 		//}
 
 		//[Test]
@@ -130,7 +173,7 @@ namespace Tests
 		//	_reviewSitestToScrape[0].Url = null;
 
 		//	//Act
-		//	var result = _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, "The Ledbury notting hill london");
+		//	var result = _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, _searchStringForRestaurant);
 
 		//	//Assert
 		//	Assert.AreEqual(result[0].Review.NumberOfReviews, 0);
@@ -144,7 +187,7 @@ namespace Tests
 		//	_reviewersScrapingDetails[0].OverallScoreHtml = "//span[contains(@class, \'reviewCount\')]]]]]]]";
 
 		//	//Act
-		//	var result = _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, "The Ledbury notting hill london");
+		//	var result = _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, _searchStringForRestaurant);
 
 		//	//Assert
 		//	Assert.AreEqual(result[0].Review.NumberOfReviews, 0);
@@ -158,7 +201,7 @@ namespace Tests
 		//	_reviewersScrapingDetails[3].NumberOfReviewsHtml = "///meta[contains(@itemprop, \'ratingValue\')]////";
 
 		//	//Act
-		//	var result = _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, "The Ledbury notting hill london");
+		//	var result = _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, _searchStringForRestaurant);
 
 		//	//Assert
 		//	//The index here is 3 not 4 becaise TripExpert does not return a result
@@ -173,7 +216,7 @@ namespace Tests
 		//	_reviewersScrapingDetails[0].NumberOfReviewsHtml = String.Empty;
 
 		//	//Act
-		//	var result = _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, "The Ledbury notting hill london");
+		//	var result = _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, _searchStringForRestaurant);
 
 		//	//Assert
 		//	Assert.AreEqual(result[0].Review.NumberOfReviews, 0);
@@ -187,13 +230,11 @@ namespace Tests
 		//	_reviewersScrapingDetails[2].OverallScoreHtml = String.Empty;
 
 		//	//Act
-		//	var result = _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, "The Ledbury notting hill london");
+		//	var result = _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, _searchStringForRestaurant);
 
 		//	//Assert
 		//	Assert.AreEqual(result[2].Review.NumberOfReviews, 0);
 		//	Assert.AreEqual(result[2].Review.OverallScore, 0.0);
 		//}
-
-		//Todo: Serach Url is null
 	}
 }

@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
+using RestaurantScores.Exceptions;
 using RestaurantScores.Managers.Interfaces;
 using RestaurantScores.Models;
 
@@ -82,10 +83,10 @@ namespace RestaurantScores.Managers
 
 				return result;
 			}
-			//TODO this needs to be refactored, causing a warning
-			catch (Exception exception)
+			catch(IncorrectScrapingAttributesException exception)
 			{
-				throw new Exception("Either the url to scrape or the scraping data itself is incorrect.", exception);
+				throw new Exception("Scraping details for Company are incorrect.", exception);
+				//TODO this needs to be refactored, causing a warning
 			}
 		}
 		
@@ -113,12 +114,8 @@ namespace RestaurantScores.Managers
 				result = htmlDoc.DocumentNode.SelectSingleNode(numberOfRatingsHtmlTag).InnerText;
 				return result.Trim().IndexOf(" ") >= 0 ? result.Trim().Substring(0, result.Trim().IndexOf(" ", StringComparison.Ordinal)) : result.Trim();
 			}
-			else
-			{
-				return "0";
-			}
 
-			
+			return "0";
 		}
 
 		private static string ExtractFromHtmlAttribute(string numberOfRatingsHtmlTag, string numberOfRatingsHtmlAttribute, HtmlDocument htmlDoc)
@@ -129,10 +126,8 @@ namespace RestaurantScores.Managers
 				result = htmlDoc.DocumentNode.SelectSingleNode(numberOfRatingsHtmlTag).Attributes[numberOfRatingsHtmlAttribute].Value;
 				return result.Trim().IndexOf(" ") >= 0 ? result.Trim().Substring(0, result.Trim().IndexOf(" ", StringComparison.Ordinal)) : result.Trim();
 			}
-			else
-			{
-				return "0";
-			}
+
+			return "0";
 		}
 	}
 }
