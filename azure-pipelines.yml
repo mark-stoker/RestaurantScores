@@ -14,11 +14,11 @@ steps:
   displayName: 'restore nuget packages'  
 
 - script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
+  displayName: 'dotnet build $(buildConfiguration)'  
 
- - task: DotNetCoreCLI@2
+- task: DotNetCoreCLI@2
   displayName: 'run tests'
-  inputs:   
+  inputs:    
     command: test
     projects: '**/*Tests/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
@@ -26,17 +26,10 @@ steps:
 - task: DotNetCoreCLI@2
   displayName: 'dotnet publish'
   inputs:
-@@ -35,6 +28,13 @@ steps:
+    command: publish
+    publishWebProjects: True
     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
     zipAfterPublish: True
 
- - task: DotNetCoreCLI@2
-  displayName: 'run tests'
-  inputs:   
-    command: test
-    projects: '**/*Tests/*.csproj'
-    arguments: '--configuration $(buildConfiguration)'
-
 - task: PublishBuildArtifacts@1
   displayName: 'publish artifacts'
-  inputs:
