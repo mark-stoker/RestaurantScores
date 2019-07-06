@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using RestaurantScores.Exceptions;
 using RestaurantScores.Managers;
 using RestaurantScores.Models;
 using RestaurantScoresUnitTests.Builders;
@@ -160,10 +162,18 @@ namespace Tests
 
 		//	//Act and Assert
 
-		//	var result = _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails,
-		//		_searchStringForRestaurant);
-		//	Assert.Throws<IncorrectScrapingPropertiesException>(() => _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, _searchStringForRestaurant)); ;
-			
+		//	//var result = _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails,
+		//	//	_searchStringForRestaurant);
+
+		//	//Assert.Catch(Exception e, _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails,
+		//	//		_searchStringForRestaurant),
+		//	//"");
+
+		//	//Assert.Throws<IncorrectScrapingPropertiesException>(() => _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, _searchStringForRestaurant)); ;
+		//	var exception = Assert.Throws<IncorrectScrapingPropertiesException>(
+		//		() => _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails,
+		//			_searchStringForRestaurant));
+		//	StringAssert.Contains("Scraping details for Company are incorrect.", exception.Message);
 		//}
 
 		//[Test]

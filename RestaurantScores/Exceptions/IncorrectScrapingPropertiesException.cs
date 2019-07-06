@@ -2,13 +2,13 @@
 
 namespace RestaurantScores.Exceptions
 {
-	public class IncorrectScrapingAttributesException : Exception
+	public class IncorrectScrapingPropertiesException : Exception
 	{
-		public IncorrectScrapingAttributesException()
+		public IncorrectScrapingPropertiesException()
 		{
 		}
 
-		public IncorrectScrapingAttributesException(string message) : base(message)
+		public IncorrectScrapingPropertiesException(string message) : base(message)
 		{
 		}
 	}

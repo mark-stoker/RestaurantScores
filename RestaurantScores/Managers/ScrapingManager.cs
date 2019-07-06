@@ -83,7 +83,7 @@ namespace RestaurantScores.Managers
 
 				return result;
 			}
-			catch(IncorrectScrapingAttributesException exception)
+			catch(IncorrectScrapingPropertiesException exception)
 			{
 				throw new Exception("Scraping details for Company are incorrect.", exception);
 				//TODO this needs to be refactored, causing a warning
