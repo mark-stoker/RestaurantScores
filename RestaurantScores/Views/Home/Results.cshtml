@@ -4,43 +4,36 @@
     ViewData["Title"] = "Results";
 }
 
-<h2>Results</h2>
-<h3>Search results for : @*@Model.First().Restaurant.Name*@</h3>
+<h2>DishTheDirt Results</h2>
+<h3>Search results for : @Model.First().Restaurant.Name</h3>
 <tbody>
 </tbody>
-<table class="table">
+<table class="table" border-bottom: 0>
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.ReviewerScrapingDetails.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ReviewerScrapingDetails.WebAddress)
+                No. Reviews
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Review.NumberOfReviews)
+                Avg. Rating
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Review.OverallScore)
+                Max. Score
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ReviewerScrapingDetails.OverallMaxScore)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Review.DishTheDirtScore)
+                Percentage Score
             </th>
         </tr>
     </thead>
     <tbody>
-       
     @foreach (var item in Model)
     {
         <tr>
             <td>
-                @item.ReviewerScrapingDetails.Name
-            </td>
-            <td>
-                @item.ReviewerScrapingDetails.WebAddress
+                <a href="@item.ReviewerScrapingDetails.WebAddress" target="_blank">@item.ReviewerScrapingDetails.Name</a>
             </td>
             <td>
                 @item.Review.NumberOfReviews
@@ -59,15 +52,16 @@
                     var divideSingle = @overallScore / overallMaxScore * 100;
                 }
             @divideSingle
-</tr>
+            </td>
+        </tr>
     }
+    </tbody>
     <tfoot>
         <tr align="right">
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
-            <td><strong>Aggregate Score:</strong></td>
+            <td><strong>DishTheDirt Score:</strong></td>
             @*TODO: format to 1 dp*@
             <td align="left">
                 @{
@@ -80,5 +74,4 @@
             </td>
         </tr>
     </tfoot>
-    </tbody>
 </table>
