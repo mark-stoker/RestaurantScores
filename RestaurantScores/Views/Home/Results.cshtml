@@ -52,7 +52,7 @@
 
                     var divideSingle = @overallScore / overallMaxScore * 100;
                 }
-            @divideSingle
+                @divideSingle
             </td>
         </tr>
     }
@@ -60,18 +60,25 @@
     <tfoot>
         <tr align="right">
             <td></td>
-            <td></td>
-            <td></td>
             <td><strong>DishTheDirt Score:</strong></td>
-            @*TODO: format to 1 dp*@
             <td align="left">
                 @{
                     double sumOveralScore = @Model.Sum(x => x.Review.OverallScore.GetValueOrDefault());
-                    double sumOverallMaxScore = @Model.Sum(y => y.ReviewerScrapingDetails.OverallMaxScore);
+                    int numberOfReviews = @Model.Select(y => y.ReviewerScrapingDetails.OverallMaxScore).Count();
 
-                    var divideAll = sumOveralScore / sumOverallMaxScore * 100;
+                    var divideAll = sumOveralScore / numberOfReviews;
                 }
                 @divideAll.ToString("0.0")
+            </td>
+            <td><strong>DishTheDirt Score:</strong></td>
+            <td align="left">
+                @{
+                    double sumOveralScorePercentage = @Model.Sum(x => x.Review.OverallScore.GetValueOrDefault());
+                    double sumOverallMaxScorePercentage = @Model.Sum(y => y.ReviewerScrapingDetails.OverallMaxScore);
+
+                    var divideAllPercentage = sumOveralScorePercentage / sumOverallMaxScorePercentage * 100;
+                }
+                @divideAllPercentage.ToString("0.0")
             </td>
         </tr>
     </tfoot>
