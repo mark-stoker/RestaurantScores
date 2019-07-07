@@ -4,10 +4,10 @@
 @{
     ViewData["Title"] = "Index";
 }
+<header>
+    <h1>DishTheDirt</h1>
+</header>
 
-<h2>DishTheDirt</h2>
-
-<hr />
 @using (Html.BeginForm("Search", "Home", FormMethod.Post, new { onsubmit = "return validateForm()" }))
 {
     <div class="row">
@@ -31,7 +31,7 @@
         </div>
     </div>
     <div>
-        <a asp-action="Index">Reset search criteria</a>
+        <a asp-action="Index">Reset</a>
     </div>
 }
 @section Scripts {
@@ -47,4 +47,8 @@
             return false;
         }
     }
+
+    //TODO need a method that 
+    //1. Redirects to a loading page
+    //2. Until the search results are found
 </script>
