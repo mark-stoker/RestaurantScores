@@ -108,7 +108,7 @@ namespace RestaurantScores.Managers
 		private static string ExtractFromHtmlTag(string numberOfRatingsHtmlTag, HtmlDocument htmlDoc, string uri)
 		{
 			string result;
-			if (htmlDoc.DocumentNode.SelectSingleNode(numberOfRatingsHtmlTag).InnerText != null)
+			if (htmlDoc.DocumentNode.SelectSingleNode(numberOfRatingsHtmlTag) != null)
 			{
 				if (uri.Contains("squaremeal") && numberOfRatingsHtmlTag != "//div[contains(@class, \'lead mb-3\')]")
 				{
@@ -137,7 +137,7 @@ namespace RestaurantScores.Managers
 		private static string ExtractFromHtmlAttribute(string numberOfRatingsHtmlTag, string numberOfRatingsHtmlAttribute, HtmlDocument htmlDoc)
 		{
 			string result;
-			if (htmlDoc.DocumentNode.SelectSingleNode(numberOfRatingsHtmlTag).InnerText != null)
+			if (htmlDoc.DocumentNode.SelectSingleNode(numberOfRatingsHtmlTag) != null)
 			{
 				result = htmlDoc.DocumentNode.SelectSingleNode(numberOfRatingsHtmlTag).Attributes[numberOfRatingsHtmlAttribute].Value;
 				return result.Trim().IndexOf(" ") >= 0 ? result.Trim().Substring(0, result.Trim().IndexOf(" ", StringComparison.Ordinal)) : result.Trim();

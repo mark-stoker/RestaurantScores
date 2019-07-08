@@ -17,11 +17,26 @@ namespace RestaurantScores.Managers
 
 		public List<Review> BingWebSearch(string searchQuery)
 		{
-			var uriQuery = uriBase + "?q=" + Uri.EscapeDataString(searchQuery) + "restaurant review" + "&count=200&mkt=en-GB";
-			HttpWebResponse response = SearchBing(uriQuery);
-			List<Review> restaurants = ParseJsonWebResponse(response);
+			var uriQuery1 = uriBase + "?q=" + Uri.EscapeDataString(searchQuery) + "+restaurant+review+" + "&count=50&offset=0&mkt=en-GB";
+			var uriQuery2 = uriBase + "?q=" + Uri.EscapeDataString(searchQuery) + "+restaurant+review" + "&count=50&offset=50&mkt=en-GB";
+			var uriQuery3 = uriBase + "?q=" + Uri.EscapeDataString(searchQuery) + "restaurant+review+" + "&count=50&offset=100&mkt=en-GB";
+			var uriQuery4 = uriBase + "?q=" + Uri.EscapeDataString(searchQuery) + "restaurant+review+" + "&count=50&offset=150&mkt=en-GB";
+			HttpWebResponse response1 = SearchBing(uriQuery1);
+			HttpWebResponse response2 = SearchBing(uriQuery2);
+			HttpWebResponse response3 = SearchBing(uriQuery3);
+			HttpWebResponse response4 = SearchBing(uriQuery4);
 
-			return restaurants;
+			List<Review> restaurants1 = ParseJsonWebResponse(response1);
+			List<Review> restaurants2 = ParseJsonWebResponse(response2);
+			List<Review> restaurants3 = ParseJsonWebResponse(response3);
+			List<Review> restaurants4 = ParseJsonWebResponse(response4);
+
+			var allRestaurantReviews = restaurants1.Concat(restaurants2)
+				.Concat(restaurants3)
+				.Concat(restaurants4)
+				.ToList();
+
+			return allRestaurantReviews;
 		}
 
 		private static List<Review> ParseJsonWebResponse(HttpWebResponse response)
@@ -36,7 +51,7 @@ namespace RestaurantScores.Managers
 			{
 				Name = (string)x["name"],
 				Url = (string)x["url"],
-			}).GroupBy(r => r.Url.Substring(0,20)).Select(d => d.First()).ToList();
+			}).GroupBy(r => r.Url.Substring(0,18)).Select(d => d.First()).ToList();
 
 			return Restaurants;
 		}

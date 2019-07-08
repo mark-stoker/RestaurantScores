@@ -71,6 +71,16 @@ namespace Tests
 						.WithOverallScoreHtmlAttribute(null)
 						.WithOverallMaxScore(5)
 						.Build(),
+					new ReviewerScrapingDetailsBuilder()
+						.WithId(5)
+						.WithName("TripExpert")
+						.WithWebAddress("www.tripexpert.com")
+						.WithNumberOfReviewsHtml("//meta[contains(@itemprop, 'reviewCount')]")
+						.WithNumberOfReviewsHtmlAttribute("content")
+						.WithOverallScoreHtml("//meta[contains(@itemprop, \'ratingValue\')]")
+						.WithOverallScoreHtmlAttribute("content")
+						.WithOverallMaxScore(5)
+						.Build(),
 				}).BuildList();
 
 			_reviewSitestToScrape = new ReviewBuilder()
@@ -96,6 +106,10 @@ namespace Tests
 						.WithName("SquareMeal")
 						.WithUrl("https://www.squaremeal.co.uk/restaurants/the-ledbury_1118")
 						.Build(),
+					new ReviewBuilder()
+						.WithName("TripExpert")
+						.WithUrl("https://www.tripexpert.com/london/restaurants/the-ledbury")
+						.Build(),
 				}).BuildList();
 		}
 
@@ -109,7 +123,7 @@ namespace Tests
 			var result = _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, _searchStringForRestaurant);
 
 			//Assert
-			Assert.AreEqual(5, result.Count);
+			Assert.AreEqual(6, result.Count);
 		}
 
 		[Test] 
@@ -180,6 +194,21 @@ namespace Tests
 			//Assert
 			Assert.IsTrue(result[4].Review.NumberOfReviews > 0);
 			Assert.IsTrue(result[4].Review.OverallScore > 0);
+		}
+
+
+		[Test]
+		public void SearchForTripExpertRatingsAndReviewCounts_ReviewAndScrapingDataIsCorrect_ScrapingDetailsReturned()
+		{
+			//Arrange
+			//See Setup()
+
+			//Act
+			var result = _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, _searchStringForRestaurant);
+
+			//Assert
+			Assert.IsTrue(result[5].Review.NumberOfReviews > 0);
+			Assert.IsTrue(result[5].Review.OverallScore > 0);
 		}
 
 
