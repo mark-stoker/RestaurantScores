@@ -54,7 +54,6 @@ namespace RestaurantScores.Managers
 		//TODO: Investigate if I need to dispose of connection??
 		private async Task<List<string>> GetReviewValuesFromHtml(string uri, string numberOfRatingsHtmlTag, string numberOfRatingsHtmlAttribute, string overallRatingHtmlTag, string overallRatingHtmlAttribute)
 		{
-			
 			//if (uri != null)
 			//{
 			//ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
@@ -69,11 +68,11 @@ namespace RestaurantScores.Managers
 
 			try
 			{
-				var htmlDoc = await Task.Factory.StartNew(() => web.Load(uri));
-
+				//Todo need some kind of error handling here if the call returns an empty html doc
+				HtmlDocument htmlDoc = await Task.Factory.StartNew(() => web.Load(uri));
 				//What if there are no reviews available?? return 0
-				string reviewCount = ExtractReviewCountFromHtml(numberOfRatingsHtmlTag, numberOfRatingsHtmlAttribute, htmlDoc);
-				string ratingValue = ExtractRatingFromHtml(overallRatingHtmlTag, overallRatingHtmlAttribute, htmlDoc);
+				string reviewCount = ExtractReviewCountFromHtml(numberOfRatingsHtmlTag, numberOfRatingsHtmlAttribute, htmlDoc, uri);
+				string ratingValue = ExtractRatingFromHtml(overallRatingHtmlTag, overallRatingHtmlAttribute, htmlDoc, uri);
 
 				var result = new List<string>
 				{
@@ -90,29 +89,46 @@ namespace RestaurantScores.Managers
 			}
 		}
 		
-		private static string ExtractReviewCountFromHtml(string numberOfRatingsHtmlTag, string numberOfRatingsHtmlAttribute, HtmlDocument htmlDoc)
+		private static string ExtractReviewCountFromHtml(string numberOfRatingsHtmlTag, string numberOfRatingsHtmlAttribute, HtmlDocument htmlDoc, string uri)
 		{
 			if (numberOfRatingsHtmlAttribute == null)
-			return ExtractFromHtmlTag(numberOfRatingsHtmlTag, htmlDoc);
+			return ExtractFromHtmlTag(numberOfRatingsHtmlTag, htmlDoc, uri);
 			
 				return ExtractFromHtmlAttribute(numberOfRatingsHtmlTag, numberOfRatingsHtmlAttribute, htmlDoc);
 		}
 
-		private static string ExtractRatingFromHtml(string overallRatingHtmlTag, string overallRatngHtmlAttribte, HtmlDocument htmlDoc)
+		private static string ExtractRatingFromHtml(string overallRatingHtmlTag, string overallRatngHtmlAttribte, HtmlDocument htmlDoc, string uri)
 		{
 			if (overallRatngHtmlAttribte == null)
-			return ExtractFromHtmlTag(overallRatingHtmlTag, htmlDoc);
+			return ExtractFromHtmlTag(overallRatingHtmlTag, htmlDoc, uri);
 			
 				return ExtractFromHtmlAttribute(overallRatingHtmlTag, overallRatngHtmlAttribte, htmlDoc);
 		}
 
-		private static string ExtractFromHtmlTag(string numberOfRatingsHtmlTag, HtmlDocument htmlDoc)
+		private static string ExtractFromHtmlTag(string numberOfRatingsHtmlTag, HtmlDocument htmlDoc, string uri)
 		{
 			string result;
-			if (htmlDoc.DocumentNode.SelectSingleNode(numberOfRatingsHtmlTag) != null)
+			if (htmlDoc.DocumentNode.SelectSingleNode(numberOfRatingsHtmlTag).InnerText != null)
 			{
-				result = htmlDoc.DocumentNode.SelectSingleNode(numberOfRatingsHtmlTag).InnerText;
-				return result.Trim().IndexOf(" ") >= 0 ? result.Trim().Substring(0, result.Trim().IndexOf(" ", StringComparison.Ordinal)) : result.Trim();
+				if (uri.Contains("squaremeal") && numberOfRatingsHtmlTag != "//div[contains(@class, \'lead mb-3\')]")
+				{
+					var rating = 0.0;
+					foreach (var node in htmlDoc.DocumentNode.SelectNodes(numberOfRatingsHtmlTag).Select(span => span.OuterHtml))
+					{
+						if (node == "<span class='fa fa-star'></span>")
+							rating += 1;
+						if (node == "<span class='fa fa-star-half-o'></span>")
+							rating += 0.5;
+					}
+
+					result = ((decimal)rating).ToString();
+					return result.Trim().IndexOf(" ") >= 0 ? result.Trim().Substring(0, result.Trim().IndexOf(" ", StringComparison.Ordinal)) : result.Trim();
+				}
+				else
+				{
+					result = htmlDoc.DocumentNode.SelectSingleNode(numberOfRatingsHtmlTag).InnerText;
+					return result.Trim().IndexOf(" ") >= 0 ? result.Trim().Substring(0, result.Trim().IndexOf(" ", StringComparison.Ordinal)) : result.Trim();
+				}
 			}
 
 			return "0";
@@ -121,7 +137,7 @@ namespace RestaurantScores.Managers
 		private static string ExtractFromHtmlAttribute(string numberOfRatingsHtmlTag, string numberOfRatingsHtmlAttribute, HtmlDocument htmlDoc)
 		{
 			string result;
-			if (htmlDoc.DocumentNode.SelectSingleNode(numberOfRatingsHtmlTag) != null)
+			if (htmlDoc.DocumentNode.SelectSingleNode(numberOfRatingsHtmlTag).InnerText != null)
 			{
 				result = htmlDoc.DocumentNode.SelectSingleNode(numberOfRatingsHtmlTag).Attributes[numberOfRatingsHtmlAttribute].Value;
 				return result.Trim().IndexOf(" ") >= 0 ? result.Trim().Substring(0, result.Trim().IndexOf(" ", StringComparison.Ordinal)) : result.Trim();

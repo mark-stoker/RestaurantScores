@@ -61,27 +61,41 @@ namespace Tests
 						.WithOverallScoreHtmlAttribute("content")
 						.WithOverallMaxScore(5)
 						.Build(),
+					new ReviewerScrapingDetailsBuilder()
+						.WithId(5)
+						.WithName("SquareMeal")
+						.WithWebAddress("www.squaremeal.co.uk")
+						.WithNumberOfReviewsHtml("//div[contains(@class, \'lead mb-3\')]")
+						.WithNumberOfReviewsHtmlAttribute(null)
+						.WithOverallScoreHtml("//div[contains(@class, \'lead mb-3\')]/span[contains(@class, \'fa fa-star\')]")
+						.WithOverallScoreHtmlAttribute(null)
+						.WithOverallMaxScore(5)
+						.Build(),
 				}).BuildList();
 
 			_reviewSitestToScrape = new ReviewBuilder()
 				.WithReviews(new List<Review>
 				{
 					new ReviewBuilder()
-						.WithName("The Ledbury, London - Updated 2019 Restaurant Reviews ..")
+						.WithName("TripAdvisor")
 						.WithUrl("https://www.tripadvisor.co.uk/Restaurant_Review-g186338-d720761-Reviews-The_Ledbury-London_England.html")
 						.Build(),
 					new ReviewBuilder()
-						.WithName("The Ledbury - London, | OpenTable")
+						.WithName("OpenTable")
 						.WithUrl("https://www.opentable.co.uk/the-ledbury")
 						.Build(),
 					new ReviewBuilder()
-						.WithName("The Ledbury | Restaurants in Westbourne Grove, London")
+						.WithName("TimeOut")
 						.WithUrl("https://www.timeout.com/london/restaurants/the-ledbury")
 						.Build(),
 					new ReviewBuilder()
-						.WithName("The Ledbury - Notting Hill - London, United Kingdom - Yelp")
+						.WithName("Yelp")
 						.WithUrl("https://www.yelp.com/biz/the-ledbury-london")
-						.Build()
+						.Build(),
+					new ReviewBuilder()
+						.WithName("SquareMeal")
+						.WithUrl("https://www.squaremeal.co.uk/restaurants/the-ledbury_1118")
+						.Build(),
 				}).BuildList();
 		}
 
@@ -95,7 +109,7 @@ namespace Tests
 			var result = _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, _searchStringForRestaurant);
 
 			//Assert
-			Assert.AreEqual(4, result.Count);
+			Assert.AreEqual(5, result.Count);
 		}
 
 		[Test] 
@@ -153,6 +167,21 @@ namespace Tests
 			Assert.IsTrue(result[3].Review.NumberOfReviews > 0);
 			Assert.IsTrue(result[3].Review.OverallScore > 0);
 		}
+
+		[Test]
+		public void SearchForSquareMealRatingsAndReviewCounts_ReviewAndScrapingDataIsCorrect_ScrapingDetailsReturned()
+		{
+			//Arrange
+			//See Setup()
+
+			//Act
+			var result = _scrapingManager.ScrapeRestaurantReviewSites(_reviewSitestToScrape, _reviewersScrapingDetails, _searchStringForRestaurant);
+
+			//Assert
+			Assert.IsTrue(result[4].Review.NumberOfReviews > 0);
+			Assert.IsTrue(result[4].Review.OverallScore > 0);
+		}
+
 
 		//[Test]
 		//public void SearchForRatingsAndReviewCounts_OpenTableReviewUrlIncorrect_ExceptionThrows()
